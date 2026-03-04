@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:55432/empleados_db
+    username: empleados_user
+    password: empleados_pass
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:55432/empleados_db
+    user: empleados_user
+    password: empleados_pass
+
+app:
+  security:
+    username: admin
+    password: admin123

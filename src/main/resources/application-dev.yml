@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/empleados_db}
+    username: ${SPRING_DATASOURCE_USERNAME:empleados_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:empleados_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  flyway:
+    enabled: true
+
+app:
+  security:
+    username: ${APP_SECURITY_USERNAME}
+    password: ${APP_SECURITY_PASSWORD}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html

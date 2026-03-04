@@ -90,6 +90,14 @@
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
 
+**Constitution-aligned mandatory constraints (backend projects):**
+
+- **AUTH-001**: Protected endpoints MUST define HTTP Basic authentication behavior.
+- **DATA-001**: Persisted data MUST target PostgreSQL and specify migration impact.
+- **ENV-001**: Local/integration execution MUST be reproducible via Docker/Compose.
+- **DOC-001**: New/changed endpoints MUST include OpenAPI/Swagger documentation requirements.
+- **QUAL-001**: The feature MUST define unit and integration test expectations.
+
 *Example of marking unclear requirements:*
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]

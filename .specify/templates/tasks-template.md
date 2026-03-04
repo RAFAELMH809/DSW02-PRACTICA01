@@ -68,6 +68,9 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T007 Create base models/entities that all stories depend on
 - [ ] T008 Configure error handling and logging infrastructure
 - [ ] T009 Setup environment configuration management
+- [ ] T010 [P] Configure PostgreSQL container with Docker/Compose for local and integration runs
+- [ ] T011 [P] Configure HTTP Basic security baseline and credential sourcing by environment
+- [ ] T012 [P] Enable OpenAPI/Swagger generation and UI exposure policy per environment
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -85,6 +88,8 @@ Examples of foundational tasks (adjust based on your project):
 
 - [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+
+> Include security and persistence coverage when applicable (authenticated flow + PostgreSQL behavior).
 
 ### Implementation for User Story 1
 

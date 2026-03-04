@@ -1,0 +1,31 @@
+# Java / Spring
+*.class
+*.jar
+*.war
+*.ear
+*.log
+target/
+build/
+.gradle/
+out/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+
+# Temp
+*.tmp
+*.swp
+
+# Local tooling / machine-specific
+.tools/
+.testcontainers.properties

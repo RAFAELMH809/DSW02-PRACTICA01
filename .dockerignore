@@ -1,0 +1,31 @@
+# VCS
+.git/
+
+# Build artifacts
+target/
+build/
+out/
+!target/
+!target/*.jar
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+*.log*
+
+# Env
+.env
+.env.*
+
+# Docker files
+Dockerfile*
+.dockerignore
+
+# Coverage / reports
+coverage/
+
+# IDE
+.vscode/
+.idea/

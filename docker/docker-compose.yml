@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: empleados-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/empleados_db
+      SPRING_DATASOURCE_USERNAME: empleados_user
+      SPRING_DATASOURCE_PASSWORD: empleados_pass
+      APP_SECURITY_USERNAME: admin
+      APP_SECURITY_PASSWORD: admin123
+    ports:
+      - "8081:8080"
+
+  postgres:
+    image: postgres:16
+    container_name: empleados-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: empleados_db
+      POSTGRES_USER: empleados_user
+      POSTGRES_PASSWORD: empleados_pass
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U empleados_user -d empleados_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

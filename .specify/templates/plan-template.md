@@ -31,7 +31,12 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Stack gate: ¿El diseño usa Spring Boot 3.x con Java 17 sin frameworks alternos incompatibles?
+- Security gate: ¿Se define HTTP Basic para endpoints protegidos y manejo de secretos fuera de código?
+- Data gate: ¿PostgreSQL es la única persistencia principal y hay plan de migraciones versionadas?
+- Environment gate: ¿Existe estrategia Docker/Compose para entorno local/integración reproducible?
+- API contract gate: ¿Se contempla documentación OpenAPI 3/Swagger para endpoints nuevos o modificados?
+- Quality gate: ¿Hay pruebas unitarias/integración y criterios de bloqueo de merge por fallas?
 
 ## Project Structure
 
