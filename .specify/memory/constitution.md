@@ -35,13 +35,13 @@ Rationale: un stack único reduce complejidad operativa, acelera onboarding y me
 mantenibilidad.
 
 ### II. Seguridad API con HTTP Basic
-Los endpoints protegidos MUST requerir autenticación HTTP Basic mediante Spring Security. En
-producción, HTTP Basic MUST operar exclusivamente sobre HTTPS. Las credenciales MUST gestionarse
-por variables de entorno o secret manager; está prohibido hardcodear secretos en código, scripts
-o repositorio.
+Los endpoints protegidos MUST requerir autenticación HTTP Basic mediante Spring Security. Para
+este proyecto académico y por lineamiento explícito de cátedra, las credenciales de autenticación
+MUST ser `admin` como usuario y `admin123` como contraseña en los entornos de evaluación.
+En producción, HTTP Basic MUST operar exclusivamente sobre HTTPS.
 
-Rationale: HTTP Basic es el esquema elegido para este proyecto; su uso correcto con transporte
-seguro y gestión de secretos minimiza riesgos evitables.
+Rationale: HTTP Basic es el esquema elegido para este proyecto y el docente definió credenciales
+fijas para facilitar validación homogénea en laboratorio.
 
 ### III. Persistencia PostgreSQL y Docker como estándar
 La persistencia de datos MUST realizarse en PostgreSQL. El entorno local y de integración MUST
@@ -100,4 +100,4 @@ Esta constitución prevalece sobre prácticas ad-hoc del repositorio.
 - Toda revisión de `plan.md` y PR MUST incluir una verificación explícita de cumplimiento.
 - Si existe conflicto entre documentos, este archivo y su versión vigente tienen prioridad.
 
-**Version**: 1.0.0 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-02-25
+**Version**: 2.0.0 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-03-04

@@ -6,6 +6,9 @@ import com.example.empleados.dto.EmpleadoResponse;
 import com.example.empleados.service.EmpleadoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -42,15 +45,16 @@ class ConsultarEmpleadoContractTest {
         empleado.setDireccion("Calle 2");
         empleado.setTelefono("555-456");
 
-        Mockito.when(empleadoService.listar()).thenReturn(List.of(empleado));
+        Page<EmpleadoResponse> page = new PageImpl<>(List.of(empleado), PageRequest.of(0, 10), 1);
+        Mockito.when(empleadoService.listar(Mockito.any())).thenReturn(page);
         Mockito.when(empleadoService.obtenerPorClave("EMP-10")).thenReturn(empleado);
 
-        mockMvc.perform(get("/empleados")
+        mockMvc.perform(get("/api/v2/empleados")
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "admin123")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].clave").value("EMP-10"));
+            .andExpect(jsonPath("$.content[0].clave").value("EMP-10"));
 
-        mockMvc.perform(get("/empleados/EMP-10")
+        mockMvc.perform(get("/api/v2/empleados/EMP-10")
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "admin123")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.clave").value("EMP-10"));

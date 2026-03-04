@@ -53,13 +53,13 @@ class ActualizarEliminarEmpleadoContractTest {
 
         Mockito.when(empleadoService.actualizar(Mockito.eq("EMP-2"), Mockito.any())).thenReturn(response);
 
-        mockMvc.perform(put("/empleados/EMP-2")
+        mockMvc.perform(put("/api/v2/empleados/EMP-2")
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "admin123"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete("/empleados/EMP-2")
+        mockMvc.perform(delete("/api/v2/empleados/EMP-2")
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "admin123")))
                 .andExpect(status().isNoContent());
     }

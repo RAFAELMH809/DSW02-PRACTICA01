@@ -22,7 +22,7 @@ class ActualizarEmpleadoIntegrationTest extends BaseIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         EmpleadoResponse created = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados", HttpMethod.POST, new HttpEntity<>(createRequest, headers), EmpleadoResponse.class)
+            .exchange("/api/v2/empleados", HttpMethod.POST, new HttpEntity<>(createRequest, headers), EmpleadoResponse.class)
                 .getBody();
         Assertions.assertNotNull(created);
 
@@ -32,7 +32,7 @@ class ActualizarEmpleadoIntegrationTest extends BaseIntegrationTest {
         updateRequest.setTelefono("555-334");
 
         ResponseEntity<EmpleadoResponse> updatedResponse = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/" + created.getClave(), HttpMethod.PUT, new HttpEntity<>(updateRequest, headers), EmpleadoResponse.class);
+            .exchange("/api/v2/empleados/" + created.getClave(), HttpMethod.PUT, new HttpEntity<>(updateRequest, headers), EmpleadoResponse.class);
 
         Assertions.assertTrue(updatedResponse.getStatusCode().is2xxSuccessful());
         EmpleadoResponse updatedBody = updatedResponse.getBody();

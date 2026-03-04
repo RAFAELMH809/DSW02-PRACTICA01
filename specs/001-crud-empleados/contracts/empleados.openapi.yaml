@@ -1,14 +1,14 @@
 openapi: 3.0.3
 info:
   title: API Empleados
-  version: 1.0.0
+  version: 2.0.0
   description: Contrato CRUD para gestión de empleados.
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8081
 security:
   - basicAuth: []
 paths:
-  /empleados:
+  /api/v2/empleados:
     post:
       summary: Crear empleado
       operationId: crearEmpleado
@@ -34,19 +34,32 @@ paths:
       summary: Listar empleados
       operationId: listarEmpleados
       tags: [Empleados]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         '200':
-          description: Lista de empleados
+          description: Página de empleados
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EmpleadoResponse'
+                $ref: '#/components/schemas/EmpleadoPageResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /empleados/{clave}:
+  /api/v2/empleados/{clave}:
     parameters:
       - name: clave
         in: path
@@ -159,6 +172,22 @@ components:
         telefono:
           type: string
           maxLength: 100
+    EmpleadoPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmpleadoResponse'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        size:
+          type: integer
+        number:
+          type: integer
 
   responses:
     BadRequest:

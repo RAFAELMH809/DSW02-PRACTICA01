@@ -12,7 +12,7 @@ class ObtenerEmpleadoNoEncontradoIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldReturnBadRequestForInvalidPattern() {
         ResponseEntity<ErrorResponse> response = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/INVALID", HttpMethod.GET, null, ErrorResponse.class);
+            .exchange("/api/v2/empleados/INVALID", HttpMethod.GET, null, ErrorResponse.class);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -20,7 +20,7 @@ class ObtenerEmpleadoNoEncontradoIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldReturnNotFoundForMissingClave() {
         ResponseEntity<ErrorResponse> response = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/EMP-9999", HttpMethod.GET, null, ErrorResponse.class);
+            .exchange("/api/v2/empleados/EMP-9999", HttpMethod.GET, null, ErrorResponse.class);
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }

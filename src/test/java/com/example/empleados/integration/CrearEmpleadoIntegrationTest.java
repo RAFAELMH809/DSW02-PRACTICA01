@@ -25,7 +25,7 @@ class CrearEmpleadoIntegrationTest extends BaseIntegrationTest {
 
         ResponseEntity<EmpleadoResponse> response = testRestTemplate
                 .withBasicAuth("admin", "admin123")
-                .exchange("/empleados", HttpMethod.POST, new HttpEntity<>(request, headers), EmpleadoResponse.class);
+            .exchange("/api/v2/empleados", HttpMethod.POST, new HttpEntity<>(request, headers), EmpleadoResponse.class);
 
         Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
         EmpleadoResponse body = response.getBody();

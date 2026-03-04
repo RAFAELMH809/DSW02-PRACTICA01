@@ -23,12 +23,12 @@ class EliminarEmpleadoIntegrationTest extends BaseIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         EmpleadoResponse created = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados", HttpMethod.POST, new HttpEntity<>(createRequest, headers), EmpleadoResponse.class)
+            .exchange("/api/v2/empleados", HttpMethod.POST, new HttpEntity<>(createRequest, headers), EmpleadoResponse.class)
                 .getBody();
         Assertions.assertNotNull(created);
 
         ResponseEntity<Void> deleteResponse = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/" + created.getClave(), HttpMethod.DELETE, null, Void.class);
+            .exchange("/api/v2/empleados/" + created.getClave(), HttpMethod.DELETE, null, Void.class);
 
         Assertions.assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
     }

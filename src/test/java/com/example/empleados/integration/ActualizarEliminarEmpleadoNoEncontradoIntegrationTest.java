@@ -24,10 +24,10 @@ class ActualizarEliminarEmpleadoNoEncontradoIntegrationTest extends BaseIntegrat
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ResponseEntity<ErrorResponse> updateResponse = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/INVALID", HttpMethod.PUT, new HttpEntity<>(request, headers), ErrorResponse.class);
+                .exchange("/api/v2/empleados/INVALID", HttpMethod.PUT, new HttpEntity<>(request, headers), ErrorResponse.class);
 
         ResponseEntity<ErrorResponse> deleteResponse = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/INVALID", HttpMethod.DELETE, null, ErrorResponse.class);
+                .exchange("/api/v2/empleados/INVALID", HttpMethod.DELETE, null, ErrorResponse.class);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, updateResponse.getStatusCode());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, deleteResponse.getStatusCode());
@@ -44,10 +44,10 @@ class ActualizarEliminarEmpleadoNoEncontradoIntegrationTest extends BaseIntegrat
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ResponseEntity<ErrorResponse> updateResponse = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/EMP-9999", HttpMethod.PUT, new HttpEntity<>(request, headers), ErrorResponse.class);
+                .exchange("/api/v2/empleados/EMP-9999", HttpMethod.PUT, new HttpEntity<>(request, headers), ErrorResponse.class);
 
         ResponseEntity<ErrorResponse> deleteResponse = testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/empleados/EMP-9999", HttpMethod.DELETE, null, ErrorResponse.class);
+                .exchange("/api/v2/empleados/EMP-9999", HttpMethod.DELETE, null, ErrorResponse.class);
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, updateResponse.getStatusCode());
         Assertions.assertEquals(HttpStatus.NOT_FOUND, deleteResponse.getStatusCode());

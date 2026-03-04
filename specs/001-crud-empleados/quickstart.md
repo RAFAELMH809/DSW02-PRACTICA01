@@ -14,8 +14,10 @@ docker compose up -d postgres
 - `SPRING_DATASOURCE_URL`
 - `SPRING_DATASOURCE_USERNAME`
 - `SPRING_DATASOURCE_PASSWORD`
-- `APP_SECURITY_USERNAME`
-- `APP_SECURITY_PASSWORD`
+
+Credenciales HTTP Basic definidas para evaluación:
+- Usuario: `admin`
+- Contraseña: `admin123`
 
 ## 3) Ejecutar migraciones y arrancar servicio
 ```bash
@@ -25,11 +27,11 @@ docker compose up -d postgres
 ## 4) Validar contrato API
 - Abrir Swagger UI en la ruta configurada por el proyecto.
 - Verificar endpoints:
-  - `POST /empleados` (request solo con `nombre`, `direccion`, `telefono`; `clave` se genera automáticamente como `EMP-<autonumérico>`)
-  - `GET /empleados`
-  - `GET /empleados/{clave}`
-  - `PUT /empleados/{clave}`
-  - `DELETE /empleados/{clave}`
+  - `POST /api/v2/empleados` (request solo con `nombre`, `direccion`, `telefono`; `clave` se genera automáticamente como `EMP-<autonumérico>`)
+  - `GET /api/v2/empleados?page=0&size=10` (listado paginado)
+  - `GET /api/v2/empleados/{clave}`
+  - `PUT /api/v2/empleados/{clave}`
+  - `DELETE /api/v2/empleados/{clave}`
 
 ## 5) Ejecutar pruebas
 ```bash

@@ -53,7 +53,7 @@ class CrearEmpleadoContractTest {
 
         Mockito.when(empleadoService.crear(Mockito.any())).thenReturn(response);
 
-        mockMvc.perform(post("/empleados")
+        mockMvc.perform(post("/api/v2/empleados")
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "admin123"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

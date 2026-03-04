@@ -1,6 +1,5 @@
 package com.example.empleados.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -16,11 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Value("${app.security.username}")
-    private String username;
-
-    @Value("${app.security.password}")
-    private String password;
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "admin123";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,8 +31,8 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername(username)
-                .password(passwordEncoder.encode(password))
+        UserDetails user = User.withUsername(USERNAME)
+            .password(passwordEncoder.encode(PASSWORD))
                 .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user);

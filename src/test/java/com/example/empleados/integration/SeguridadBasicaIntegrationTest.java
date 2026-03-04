@@ -10,7 +10,7 @@ class SeguridadBasicaIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldReturnUnauthorizedWithoutCredentials() {
-        ResponseEntity<String> response = testRestTemplate.exchange("/empleados", HttpMethod.GET, null, String.class);
+        ResponseEntity<String> response = testRestTemplate.exchange("/api/v2/empleados", HttpMethod.GET, null, String.class);
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 }

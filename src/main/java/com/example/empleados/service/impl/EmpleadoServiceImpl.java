@@ -1,7 +1,7 @@
 package com.example.empleados.service.impl;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,10 +46,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EmpleadoResponse> listar() {
-        return empleadoRepository.findAll().stream()
-                .map(empleadoMapper::toResponse)
-                .toList();
+    public Page<EmpleadoResponse> listar(Pageable pageable) {
+        return empleadoRepository.findAll(pageable)
+                .map(empleadoMapper::toResponse);
     }
 
     @Override

@@ -28,7 +28,7 @@ class CrearEmpleadoClaveUnicaConcurrenteIntegrationTest extends BaseIntegrationT
             headers.setContentType(MediaType.APPLICATION_JSON);
             ResponseEntity<EmpleadoResponse> response = testRestTemplate
                     .withBasicAuth("admin", "admin123")
-                    .exchange("/empleados", HttpMethod.POST, new HttpEntity<>(request, headers), EmpleadoResponse.class);
+                    .exchange("/api/v2/empleados", HttpMethod.POST, new HttpEntity<>(request, headers), EmpleadoResponse.class);
 
             Assertions.assertTrue(response.getStatusCode().is2xxSuccessful());
             EmpleadoResponse body = response.getBody();
