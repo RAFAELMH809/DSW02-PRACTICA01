@@ -1,154 +1,166 @@
 # Tasks: CRUD de Departamentos Vinculado a Empleados
 
 **Input**: Design documents from `/specs/003-crud-departamentos-empleados/`
-**Prerequisites**: plan.md (required), spec.md (required)
+**Prerequisites**: plan.md (required), spec.md (required), research.md, data-model.md, contracts/, quickstart.md
 
-**Tests**: Se incluyen tareas de pruebas porque `QUAL-001` exige pruebas unitarias e integracion, y el feature necesita validar contrato, migracion y seguridad.
+**Tests**: Se incluyen tareas de pruebas porque `QUAL-001` exige cobertura unitaria e integracion para CRUD, seguridad y reglas de relacion con empleados.
 
-**Organization**: Tareas agrupadas por historia de usuario para implementacion y prueba independiente.
+**Organization**: Las tareas se agrupan por historia de usuario para permitir implementacion y validacion independientes.
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: Puede ejecutarse en paralelo (archivos distintos, sin dependencia directa)
+- **[Story]**: Historia de usuario (`[US1]`, `[US2]`, `[US3]`, `[US4]`)
+- Todas las tareas incluyen rutas de archivo especificas
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Preparar la documentacion tecnica base del feature y el entorno de configuracion comun.
+**Purpose**: Preparar artefactos base del feature y su documentacion tecnica.
 
-- [X] T001 Crear contrato OpenAPI inicial de departamentos en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
-- [X] T002 Crear quickstart del feature en `specs/003-crud-departamentos-empleados/quickstart.md`
-- [X] T003 [P] Crear research del feature con decisiones de migracion y auditoria en `specs/003-crud-departamentos-empleados/research.md`
-- [X] T004 [P] Crear data model del feature en `specs/003-crud-departamentos-empleados/data-model.md`
+- [ ] T001 Crear contrato inicial de departamentos en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
+- [ ] T002 [P] Preparar guion de ejecucion del feature en `specs/003-crud-departamentos-empleados/quickstart.md`
+- [ ] T003 [P] Consolidar decisiones tecnicas del feature en `specs/003-crud-departamentos-empleados/research.md`
+- [ ] T004 [P] Consolidar modelo de datos en `specs/003-crud-departamentos-empleados/data-model.md`
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Infraestructura tecnica obligatoria antes de cualquier historia.
+**Purpose**: Infraestructura obligatoria para habilitar todas las historias.
 
-**CRITICAL**: Ninguna historia inicia hasta cerrar esta fase.
+**CRITICAL**: Ninguna historia inicia hasta completar esta fase.
 
-- [X] T005 Crear migracion de tabla de departamentos en `src/main/resources/db/migration/V2__create_departamentos_table.sql`
-- [X] T006 [P] Crear migracion de relacion obligatoria y backfill `SIN_DEPTO` en `src/main/resources/db/migration/V3__link_empleados_departamentos.sql`
-- [X] T007 [P] Crear entidad `Departamento` en `src/main/java/com/example/empleados/domain/Departamento.java`
-- [X] T008 [P] Actualizar entidad `Empleado` con referencia obligatoria a departamento en `src/main/java/com/example/empleados/domain/Empleado.java`
-- [X] T009 [P] Crear repositorio `DepartamentoRepository` en `src/main/java/com/example/empleados/repository/DepartamentoRepository.java`
-- [X] T010 [P] Crear DTOs `DepartamentoRequest` y `DepartamentoResponse` en `src/main/java/com/example/empleados/dto/DepartamentoRequest.java` y `src/main/java/com/example/empleados/dto/DepartamentoResponse.java`
-- [X] T011 [P] Crear mapper `DepartamentoMapper` en `src/main/java/com/example/empleados/service/DepartamentoMapper.java`
-- [X] T012 Actualizar DTOs de empleados para requerir `departamentoClave` en `src/main/java/com/example/empleados/dto/EmpleadoRequest.java` y `src/main/java/com/example/empleados/dto/EmpleadoResponse.java`
-- [X] T013 Implementar validador de reglas de negocio compartidas (duplicidad, `SIN_DEPTO`, relacion obligatoria) en `src/main/java/com/example/empleados/service/DepartamentoRulesValidator.java`
+- [ ] T005 Crear tabla `departamentos` y constraints base en `src/main/resources/db/migration/V2__create_departamentos_table.sql`
+- [ ] T006 Crear migracion de vinculo obligatorio empleados-departamentos con backfill `SIN_DEPTO` en `src/main/resources/db/migration/V3__link_empleados_departamentos.sql`
+- [ ] T007 [P] Crear entidad `Departamento` en `src/main/java/com/example/empleados/domain/Departamento.java`
+- [ ] T008 [P] Actualizar entidad `Empleado` para referencia obligatoria a departamento en `src/main/java/com/example/empleados/domain/Empleado.java`
+- [ ] T009 [P] Crear repositorio `DepartamentoRepository` en `src/main/java/com/example/empleados/repository/DepartamentoRepository.java`
+- [ ] T010 [P] Crear DTOs de departamento en `src/main/java/com/example/empleados/dto/DepartamentoRequest.java` y `src/main/java/com/example/empleados/dto/DepartamentoResponse.java`
+- [ ] T011 [P] Crear DTO de actualizacion de departamento en `src/main/java/com/example/empleados/dto/DepartamentoUpdateRequest.java`
+- [ ] T012 [P] Crear mapper `DepartamentoMapper` en `src/main/java/com/example/empleados/service/DepartamentoMapper.java`
+- [ ] T013 Crear servicio de reglas compartidas (`clave`, `SIN_DEPTO`, eliminacion) en `src/main/java/com/example/empleados/service/DepartamentoRulesValidator.java`
+- [ ] T014 Ajustar request/response de empleados para `departamentoClave` obligatorio en `src/main/java/com/example/empleados/dto/EmpleadoRequest.java` y `src/main/java/com/example/empleados/dto/EmpleadoResponse.java`
+- [ ] T015 Configurar manejo de errores de negocio para duplicidad como `409` en `src/main/java/com/example/empleados/controller/GlobalExceptionHandler.java`
 
-**Checkpoint**: Fundacion lista para historias.
+**Checkpoint**: Fundacion completa; historias habilitadas.
 
 ---
 
 ## Phase 3: User Story 1 - Registrar departamentos (Priority: P1) 🎯 MVP
 
-**Goal**: Crear departamentos con `clave` y `nombre`, garantizando unicidad case-insensitive e inmutabilidad de la clave.
+**Goal**: Crear departamentos con `clave` y `nombre` validos, con clave inmutable y unicidad case-insensitive.
 
-**Independent Test**: Crear un departamento con datos validos devuelve `201`; crear uno duplicado por clave o por variacion de mayusculas/minusculas devuelve error claro.
+**Independent Test**: Crear departamento valido devuelve `201`; clave duplicada (incluyendo case-insensitive) devuelve `409`.
 
 ### Tests for User Story 1
 
-- [X] T014 [P] [US1] Crear contrato de alta de departamentos en `src/test/java/com/example/empleados/contract/CrearDepartamentoContractTest.java`
-- [X] T015 [P] [US1] Crear prueba de integracion de alta exitosa en `src/test/java/com/example/empleados/integration/CrearDepartamentoIntegrationTest.java`
-- [X] T016 [P] [US1] Crear prueba de duplicidad case-insensitive en `src/test/java/com/example/empleados/integration/CrearDepartamentoClaveDuplicadaIntegrationTest.java`
-- [X] T017 [P] [US1] Crear prueba unitaria de validacion de `DepartamentoRequest` en `src/test/java/com/example/empleados/unit/DepartamentoValidationTest.java`
+- [ ] T016 [P] [US1] Crear contrato de `POST /api/v2/departamentos` en `src/test/java/com/example/empleados/contract/CrearDepartamentoContractTest.java`
+- [ ] T017 [P] [US1] Crear prueba de integracion de alta exitosa en `src/test/java/com/example/empleados/integration/CrearDepartamentoIntegrationTest.java`
+- [ ] T018 [P] [US1] Crear prueba de duplicidad case-insensitive en `src/test/java/com/example/empleados/integration/CrearDepartamentoClaveDuplicadaIntegrationTest.java`
+- [ ] T019 [P] [US1] Crear prueba unitaria de formato de clave `^[A-Z0-9_]{2,20}$` en `src/test/java/com/example/empleados/unit/DepartamentoValidationTest.java`
 
 ### Implementation for User Story 1
 
-- [X] T018 [US1] Crear interfaz `DepartamentoService` en `src/main/java/com/example/empleados/service/DepartamentoService.java`
-- [X] T019 [US1] Implementar `DepartamentoServiceImpl` para alta de departamentos en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
-- [X] T020 [US1] Implementar endpoint `POST /api/v2/departamentos` en `src/main/java/com/example/empleados/controller/DepartamentoController.java`
-- [X] T021 [US1] Registrar auditoria de creacion de departamentos en logs desde `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T020 [US1] Crear interfaz `DepartamentoService` en `src/main/java/com/example/empleados/service/DepartamentoService.java`
+- [ ] T021 [US1] Implementar alta de departamento en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T022 [US1] Implementar endpoint `POST /api/v2/departamentos` en `src/main/java/com/example/empleados/controller/DepartamentoController.java`
+- [ ] T023 [US1] Agregar auditoria de creacion (usuario + operacion + timestamp) en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T024 [US1] Documentar `409 Conflict` por clave duplicada en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
 
-**Checkpoint**: MVP funcional y demostrable.
+**Checkpoint**: MVP de departamentos listo y demostrable.
 
 ---
 
 ## Phase 4: User Story 2 - Consultar y listar departamentos (Priority: P2)
 
-**Goal**: Consultar departamentos por `clave` y listar departamentos con paginacion `page` y `size`, mostrando relacion con empleados.
+**Goal**: Consultar por clave y listar departamentos con paginacion, orden por defecto `clave ASC`, `size <= 100` y `employeeCount`.
 
-**Independent Test**: Consultar por clave devuelve el departamento esperado; listar con paginacion devuelve pagina consistente; consultar inexistente devuelve `404`.
+**Independent Test**: `GET` por clave devuelve departamento; listado paginado devuelve metadata, orden estable y valida limite de size.
 
 ### Tests for User Story 2
 
-- [X] T022 [P] [US2] Crear contrato de consulta y listado paginado en `src/test/java/com/example/empleados/contract/ConsultarDepartamentoContractTest.java`
-- [X] T023 [P] [US2] Crear prueba de consulta por clave en `src/test/java/com/example/empleados/integration/ObtenerDepartamentoIntegrationTest.java`
-- [X] T024 [P] [US2] Crear prueba de listado paginado en `src/test/java/com/example/empleados/integration/ListarDepartamentosIntegrationTest.java`
-- [X] T025 [P] [US2] Crear prueba de no encontrado en consulta por clave en `src/test/java/com/example/empleados/integration/ObtenerDepartamentoNoEncontradoIntegrationTest.java`
-- [ ] T052 [P] [US2] Crear prueba de acceso sin token (401) en `src/test/java/com/example/empleados/integration/AccesoDepartamentoSinTokenIntegrationTest.java`
-- [ ] T053 [P] [US2] Crear prueba de acceso con token invalido (401) en `src/test/java/com/example/empleados/integration/AccesoDepartamentoTokenInvalidoIntegrationTest.java`
-- [ ] T054 [P] [US2] Crear prueba de acceso con token expirado (401) en `src/test/java/com/example/empleados/integration/AccesoDepartamentoTokenExpiradoIntegrationTest.java`
+- [ ] T025 [P] [US2] Crear contrato de `GET /api/v2/departamentos` paginado en `src/test/java/com/example/empleados/contract/ConsultarDepartamentoContractTest.java`
+- [ ] T026 [P] [US2] Crear prueba de consulta por clave existente en `src/test/java/com/example/empleados/integration/ObtenerDepartamentoIntegrationTest.java`
+- [ ] T027 [P] [US2] Crear prueba de consulta por clave inexistente (`404`) en `src/test/java/com/example/empleados/integration/ObtenerDepartamentoNoEncontradoIntegrationTest.java`
+- [ ] T028 [P] [US2] Crear prueba de listado paginado y orden `clave ASC` en `src/test/java/com/example/empleados/integration/ListarDepartamentosIntegrationTest.java`
+- [ ] T029 [P] [US2] Crear prueba de validacion de `size > 100` en `src/test/java/com/example/empleados/integration/ListarDepartamentosSizeInvalidoIntegrationTest.java`
+- [ ] T030 [P] [US2] Crear prueba de acceso sin token (`401`) en `src/test/java/com/example/empleados/integration/AccesoDepartamentoSinTokenIntegrationTest.java`
+- [ ] T031 [P] [US2] Crear prueba de acceso con token invalido (`401`) en `src/test/java/com/example/empleados/integration/AccesoDepartamentoTokenInvalidoIntegrationTest.java`
 
 ### Implementation for User Story 2
 
-- [X] T026 [US2] Implementar consultas por `clave` y listados paginados en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
-- [X] T027 [US2] Implementar endpoints `GET /api/v2/departamentos` y `GET /api/v2/departamentos/{clave}` en `src/main/java/com/example/empleados/controller/DepartamentoController.java`
-- [X] T028 [US2] Ajustar mapper/response para exponer `employeeCount` en `src/main/java/com/example/empleados/service/DepartamentoMapper.java` y `src/main/java/com/example/empleados/dto/DepartamentoResponse.java`
-- [X] T029 [US2] Actualizar contrato OpenAPI de departamentos y respuestas paginadas en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
+- [ ] T032 [US2] Implementar consulta por clave en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T033 [US2] Implementar listado paginado con orden por defecto `clave ASC` y limite `size <= 100` en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T034 [US2] Implementar endpoints `GET /api/v2/departamentos` y `GET /api/v2/departamentos/{clave}` en `src/main/java/com/example/empleados/controller/DepartamentoController.java`
+- [ ] T035 [US2] Exponer `employeeCount` en mapper y response en `src/main/java/com/example/empleados/service/DepartamentoMapper.java` y `src/main/java/com/example/empleados/dto/DepartamentoResponse.java`
+- [ ] T036 [US2] Documentar parametros `page/size`, limite maximo y orden por defecto en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
 
-**Checkpoint**: US1 y US2 operan independientemente.
+**Checkpoint**: Consulta y listado independientes, con reglas de paginacion verificadas.
 
 ---
 
 ## Phase 5: User Story 3 - Actualizar y eliminar departamentos (Priority: P3)
 
-**Goal**: Actualizar solo el nombre de departamentos y eliminar departamentos validando que no tengan empleados asociados ni sean `SIN_DEPTO`.
+**Goal**: Actualizar solo `nombre` y eliminar departamentos con reglas de negocio (`SIN_DEPTO` no eliminable, bloqueo con empleados).
 
-**Independent Test**: Actualizar nombre de un departamento funciona; eliminar con empleados asociados o `SIN_DEPTO` falla; eliminar uno sin dependencias responde `204`.
+**Independent Test**: Actualizar nombre funciona; eliminar con empleados o `SIN_DEPTO` falla; eliminar sin dependencias devuelve `204`.
 
 ### Tests for User Story 3
 
-- [X] T030 [P] [US3] Crear contrato de actualizacion y eliminacion en `src/test/java/com/example/empleados/contract/ActualizarEliminarDepartamentoContractTest.java`
-- [X] T031 [P] [US3] Crear prueba de actualizacion exitosa de nombre en `src/test/java/com/example/empleados/integration/ActualizarDepartamentoIntegrationTest.java`
-- [X] T032 [P] [US3] Crear prueba de eliminacion exitosa sin empleados en `src/test/java/com/example/empleados/integration/EliminarDepartamentoIntegrationTest.java`
-- [X] T033 [P] [US3] Crear prueba de eliminacion bloqueada por empleados asociados en `src/test/java/com/example/empleados/integration/EliminarDepartamentoConEmpleadosIntegrationTest.java`
-- [X] T034 [P] [US3] Crear prueba de eliminacion prohibida de `SIN_DEPTO` en `src/test/java/com/example/empleados/integration/EliminarDepartamentoTecnicoIntegrationTest.java`
+- [ ] T037 [P] [US3] Crear contrato de `PUT/DELETE /api/v2/departamentos/{clave}` en `src/test/java/com/example/empleados/contract/ActualizarEliminarDepartamentoContractTest.java`
+- [ ] T038 [P] [US3] Crear prueba de actualizacion de nombre exitosa en `src/test/java/com/example/empleados/integration/ActualizarDepartamentoIntegrationTest.java`
+- [ ] T039 [P] [US3] Crear prueba de eliminacion exitosa sin empleados en `src/test/java/com/example/empleados/integration/EliminarDepartamentoIntegrationTest.java`
+- [ ] T040 [P] [US3] Crear prueba de eliminacion bloqueada por empleados asociados en `src/test/java/com/example/empleados/integration/EliminarDepartamentoConEmpleadosIntegrationTest.java`
+- [ ] T041 [P] [US3] Crear prueba de eliminacion prohibida de `SIN_DEPTO` en `src/test/java/com/example/empleados/integration/EliminarDepartamentoTecnicoIntegrationTest.java`
 
 ### Implementation for User Story 3
 
-- [X] T035 [US3] Implementar actualizacion de nombre con politica last-write-wins en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
-- [X] T036 [US3] Implementar reglas de eliminacion y validacion de `SIN_DEPTO` en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
-- [X] T037 [US3] Implementar endpoints `PUT /api/v2/departamentos/{clave}` y `DELETE /api/v2/departamentos/{clave}` en `src/main/java/com/example/empleados/controller/DepartamentoController.java`
-- [X] T038 [US3] Registrar auditoria de actualizacion y eliminacion de departamentos en logs desde `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T042 [US3] Implementar actualizacion de nombre (last-write-wins) en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T043 [US3] Implementar validaciones de eliminacion (`SIN_DEPTO` y empleados asociados) en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T044 [US3] Implementar endpoints `PUT` y `DELETE` en `src/main/java/com/example/empleados/controller/DepartamentoController.java`
+- [ ] T045 [US3] Agregar auditoria de actualizacion/eliminacion en `src/main/java/com/example/empleados/service/impl/DepartamentoServiceImpl.java`
+- [ ] T046 [US3] Ajustar contrato OpenAPI para errores de eliminacion y actualizacion en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
 
-**Checkpoint**: Todo el CRUD de departamentos queda funcional.
+**Checkpoint**: CRUD de departamentos completo y consistente.
 
 ---
 
-## Phase 6: User Story 4 - Integrar empleados con departamento obligatorio (Priority: P3)
+## Phase 6: User Story 4 - Gestionar empleados con departamento obligatorio (Priority: P3)
 
-**Goal**: Hacer obligatoria la referencia `departamentoClave` en empleados y validar que exista al crear o actualizar empleados.
+**Goal**: Integrar empleados con `departamentoClave` obligatoria, validando existencia de departamento en create/update.
 
-**Independent Test**: Crear/actualizar empleado con `departamentoClave` valido funciona; sin departamento o con clave inexistente falla; empleados historicos quedan vinculados a `SIN_DEPTO` tras migracion.
+**Independent Test**: Crear/actualizar empleado con departamento valido funciona; sin departamento o inexistente falla; migracion asigna historicos a `SIN_DEPTO`.
 
 ### Tests for User Story 4
 
-- [X] T039 [P] [US4] Crear prueba de alta de empleado con departamento valido en `src/test/java/com/example/empleados/integration/CrearEmpleadoConDepartamentoIntegrationTest.java`
-- [X] T040 [P] [US4] Crear prueba de alta de empleado sin departamento en `src/test/java/com/example/empleados/integration/CrearEmpleadoSinDepartamentoIntegrationTest.java`
-- [X] T041 [P] [US4] Crear prueba de alta de empleado con departamento inexistente en `src/test/java/com/example/empleados/integration/CrearEmpleadoDepartamentoInexistenteIntegrationTest.java`
-- [X] T042 [P] [US4] Crear prueba de actualizacion de empleado con cambio de departamento valido en `src/test/java/com/example/empleados/integration/ActualizarEmpleadoDepartamentoIntegrationTest.java`
-- [ ] T043 [P] [US4] Crear prueba de migracion de empleados historicos a `SIN_DEPTO` en `src/test/java/com/example/empleados/integration/MigracionEmpleadoSinDepartamentoIntegrationTest.java`
+- [ ] T047 [P] [US4] Crear prueba de alta de empleado con departamento valido en `src/test/java/com/example/empleados/integration/CrearEmpleadoConDepartamentoIntegrationTest.java`
+- [ ] T048 [P] [US4] Crear prueba de alta de empleado sin departamento en `src/test/java/com/example/empleados/integration/CrearEmpleadoSinDepartamentoIntegrationTest.java`
+- [ ] T049 [P] [US4] Crear prueba de alta de empleado con departamento inexistente en `src/test/java/com/example/empleados/integration/CrearEmpleadoDepartamentoInexistenteIntegrationTest.java`
+- [ ] T050 [P] [US4] Crear prueba de actualizacion de empleado con nuevo departamento valido en `src/test/java/com/example/empleados/integration/ActualizarEmpleadoDepartamentoIntegrationTest.java`
+- [ ] T051 [P] [US4] Crear prueba de migracion de historicos a `SIN_DEPTO` en `src/test/java/com/example/empleados/integration/MigracionEmpleadoSinDepartamentoIntegrationTest.java`
 
 ### Implementation for User Story 4
 
-- [X] T044 [US4] Actualizar `EmpleadoMapper` para mapear `departamentoClave` en `src/main/java/com/example/empleados/service/EmpleadoMapper.java`
-- [X] T045 [US4] Actualizar `EmpleadoServiceImpl` para validar existencia de departamento al crear y actualizar en `src/main/java/com/example/empleados/service/impl/EmpleadoServiceImpl.java`
-- [X] T046 [US4] Ajustar serializacion y respuestas de empleados para exponer `departamentoClave` en `src/main/java/com/example/empleados/dto/EmpleadoResponse.java`
-- [X] T047 [US4] Actualizar contrato/documentacion de empleados con `departamentoClave` en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
+- [ ] T052 [US4] Actualizar mapeo de `departamentoClave` en `src/main/java/com/example/empleados/service/EmpleadoMapper.java`
+- [ ] T053 [US4] Validar existencia de departamento en create/update de empleados en `src/main/java/com/example/empleados/service/impl/EmpleadoServiceImpl.java`
+- [ ] T054 [US4] Ajustar controlador de empleados para contrato actualizado en `src/main/java/com/example/empleados/controller/EmpleadoController.java`
+- [ ] T055 [US4] Exponer `departamentoClave` en respuestas de empleados en `src/main/java/com/example/empleados/dto/EmpleadoResponse.java`
+- [ ] T056 [US4] Documentar cambios de empleados (`departamentoClave` obligatoria) en `specs/003-crud-departamentos-empleados/contracts/departamentos.openapi.yaml`
 
-**Checkpoint**: Relacion obligatoria empleados-departamentos implementada y verificable.
+**Checkpoint**: Integracion empleados-departamentos obligatoria y validada.
 
 ---
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-**Purpose**: Cierre de calidad, documentacion y regresion.
+**Purpose**: Cierre de calidad, evidencia de NFR y validacion operativa final.
 
-- [ ] T048 [P] Actualizar checklist de calidad del feature en `specs/003-crud-departamentos-empleados/checklists/requirements.md`
-- [ ] T049 [P] Crear evidencia de validacion de logs/auditoria en `specs/003-crud-departamentos-empleados/checklists/audit.md`
-- [ ] T050 [P] Ejecutar regression suite de empleados y departamentos en `src/test/java/com/example/empleados`
-- [ ] T051 Ejecutar validacion manual del quickstart del feature en `specs/003-crud-departamentos-empleados/quickstart.md`
-- [ ] T055 [P] Medir rendimiento de consulta/listado paginado para SC-002 en `src/test/java/com/example/empleados/integration/DepartamentosPerformanceIntegrationTest.java`
-- [ ] T056 [P] Publicar evidencia de SC-002 (p95 < 2s) en `specs/003-crud-departamentos-empleados/checklists/performance.md`
+- [ ] T057 [P] Actualizar checklist de calidad del feature en `specs/003-crud-departamentos-empleados/checklists/requirements.md`
+- [ ] T058 [P] Generar evidencia de auditoria de escrituras en `specs/003-crud-departamentos-empleados/checklists/audit.md`
+- [ ] T059 [P] Crear prueba de rendimiento para SC-002 (p95 < 2s) en `src/test/java/com/example/empleados/integration/DepartamentosPerformanceIntegrationTest.java`
+- [ ] T060 [P] Publicar evidencia de rendimiento en `specs/003-crud-departamentos-empleados/checklists/performance.md`
+- [ ] T061 Ejecutar suite de regresion empleados+departamentos en `src/test/java/com/example/empleados`
+- [ ] T062 Ejecutar validacion manual de quickstart en `specs/003-crud-departamentos-empleados/quickstart.md`
 
 ---
 
@@ -156,95 +168,96 @@
 
 ### Phase Dependencies
 
-- **Phase 1 (Setup)**: inicia sin dependencias.
+- **Phase 1 (Setup)**: inicio inmediato.
 - **Phase 2 (Foundational)**: depende de Setup y bloquea todas las historias.
 - **Phase 3 (US1)**: depende de Foundational.
-- **Phase 4 (US2)**: depende de Foundational y reutiliza la base creada por US1.
-- **Phase 5 (US3)**: depende de Foundational y usa el servicio/controlador de departamentos ya creado.
-- **Phase 6 (US4)**: depende de Foundational y del modelo `Departamento`; puede ejecutarse tras US1 si el equipo decide priorizar integracion sobre consulta completa.
-- **Phase 7 (Polish)**: depende de las historias completadas.
+- **Phase 4 (US2)**: depende de Foundational y del agregado de departamentos.
+- **Phase 5 (US3)**: depende de Foundational y del agregado de departamentos.
+- **Phase 6 (US4)**: depende de Foundational y del agregado de departamentos.
+- **Phase 7 (Polish)**: depende de cierre de historias objetivo.
 
 ### User Story Dependencies
 
-- **US1 (P1)**: independiente tras fundacion y define el MVP de alta de departamentos.
-- **US2 (P2)**: depende de la existencia del agregado `Departamento`, pero es independiente de US3 y US4 para probar consultas.
-- **US3 (P3)**: depende del agregado `Departamento` implementado por US1.
-- **US4 (P3)**: depende del agregado `Departamento` y de migraciones/DTOs comunes de la fundacion.
+- **US1 (P1)**: base del feature; habilita historias posteriores.
+- **US2 (P2)**: puede avanzar tras Foundational, pero se valida mejor con datos de US1.
+- **US3 (P3)**: depende funcionalmente de US1.
+- **US4 (P3)**: depende de US1 y migraciones de Foundational.
+
+### Dependency Graph (Story Order)
+
+- `Setup -> Foundational -> US1 -> (US2 || US3 || US4) -> Polish`
 
 ### Within Each User Story
 
-- Pruebas primero y en estado fallido inicial.
-- Entidades/DTOs/mappers antes de servicios.
-- Servicios antes de controladores.
-- Contratos y documentacion sincronizados con cada historia.
-- Regresion de empleados al final de US4.
+- Pruebas primero (deben fallar antes de implementar).
+- DTO/mapper/repository antes de servicio.
+- Servicio antes de controlador.
+- Contrato OpenAPI sincronizado al cierre de la historia.
 
-## Parallel Opportunities
+### Parallel Opportunities
 
-- Setup en paralelo: `T003`, `T004`.
-- Foundational en paralelo: `T006`, `T007`, `T008`, `T009`, `T010`, `T011`.
-- US1 en paralelo: `T014`, `T015`, `T016`, `T017`.
-- US2 en paralelo: `T022`, `T023`, `T024`, `T025`.
-- US3 en paralelo: `T030`, `T031`, `T032`, `T033`, `T034`.
-- US4 en paralelo: `T039`, `T040`, `T041`, `T042`, `T043`.
-- Polish en paralelo: `T048`, `T049`, `T050`.
+- Setup paralelizable: `T002`, `T003`, `T004`.
+- Foundational paralelizable: `T007`, `T008`, `T009`, `T010`, `T011`, `T012`.
+- US1 paralelizable: `T016`, `T017`, `T018`, `T019`.
+- US2 paralelizable: `T025`, `T026`, `T027`, `T028`, `T029`, `T030`, `T031`.
+- US3 paralelizable: `T037`, `T038`, `T039`, `T040`, `T041`.
+- US4 paralelizable: `T047`, `T048`, `T049`, `T050`, `T051`.
+- Polish paralelizable: `T057`, `T058`, `T059`, `T060`.
 
-## Parallel Example: User Story 1
+---
+
+## Parallel Example: User Story 2
 
 ```bash
-T014 Contract alta departamento
-T015 Integracion alta exitosa
-T016 Integracion duplicidad case-insensitive
-T017 Validacion request
+Task: "T025 [US2] Contrato de listado/consulta"
+Task: "T026 [US2] Integracion obtener por clave"
+Task: "T028 [US2] Integracion listado paginado + orden"
+Task: "T029 [US2] Integracion size > 100"
 ```
 
 ## Parallel Example: User Story 3
 
 ```bash
-T030 Contract update/delete
-T031 Actualizar nombre
-T032 Eliminar sin empleados
-T033 Eliminar con empleados
-T034 Eliminar SIN_DEPTO
+Task: "T038 [US3] Integracion actualizar nombre"
+Task: "T039 [US3] Integracion eliminar sin empleados"
+Task: "T040 [US3] Integracion eliminar con empleados"
+Task: "T041 [US3] Integracion eliminar SIN_DEPTO"
 ```
 
 ## Parallel Example: User Story 4
 
 ```bash
-T039 Crear empleado con departamento
-T040 Crear empleado sin departamento
-T041 Crear empleado con departamento inexistente
-T042 Actualizar empleado con nuevo departamento
-T043 Migracion a SIN_DEPTO
+Task: "T047 [US4] Crear empleado con departamento"
+Task: "T048 [US4] Crear empleado sin departamento"
+Task: "T049 [US4] Crear empleado con departamento inexistente"
+Task: "T050 [US4] Actualizar departamento de empleado"
 ```
+
+---
 
 ## Implementation Strategy
 
 ### MVP First (User Story 1 Only)
 
-1. Completar Setup.
-2. Completar Foundational.
-3. Completar US1.
-4. Validar alta de departamentos y duplicidad case-insensitive.
+1. Completar Setup (Phase 1).
+2. Completar Foundational (Phase 2).
+3. Completar US1 (Phase 3).
+4. Validar alta + duplicidad case-insensitive + `409 Conflict`.
 
 ### Incremental Delivery
 
-1. Setup + Foundational.
-2. US1 (alta de departamentos).
-3. US2 (consulta y listado paginado).
-4. US3 (actualizacion y eliminacion).
-5. US4 (integracion obligatoria con empleados).
-6. Polish + regression.
+1. Entregar base tecnica (Phase 1 + 2).
+2. Entregar US1 (crear departamentos).
+3. Entregar US2 (consulta/listado paginado).
+4. Entregar US3 (actualizar/eliminar con reglas).
+5. Entregar US4 (integracion obligatoria empleados-departamentos).
+6. Cerrar con Polish y evidencias.
 
 ### Parallel Team Strategy
 
-1. Equipo completo en Setup/Foundational.
-2. Luego distribuir por historias: US1/US2, US3 y US4.
-3. Integrar contratos, regression y quickstart al cierre.
-
-## Notes
-
-- Formato checklist aplicado: `- [ ] T### [P?] [US?] Descripcion con ruta`.
-- Labels `[US1]`, `[US2]`, `[US3]`, `[US4]` solo aparecen en fases de historias.
-- Cada historia es independiente y comprobable.
-- `US4` existe para aislar la integracion con empleados y mantener trazabilidad de una dependencia transversal del feature.
+1. Equipo completo en Setup + Foundational.
+2. Luego distribuir por historia:
+   - Equipo A: US2
+   - Equipo B: US3
+   - Equipo C: US4
+3. Integrar y validar con regression en Phase 7.
