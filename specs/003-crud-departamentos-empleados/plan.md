@@ -60,8 +60,13 @@ specs/003-crud-departamentos-empleados/
 ├── research.md
 ├── data-model.md
 ├── quickstart.md
+├── checklists/
+│   ├── environment.md
+│   ├── acceptance.md
+│   └── frontend-auth-e2e.md
 ├── contracts/
 │   └── departamentos.openapi.yaml
+│   └── departamentos-autenticacion.openapi.yaml
 └── tasks.md
 ```
 
