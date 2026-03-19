@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.springframework.stereotype.Component;
 
 import com.example.empleados.exception.BadRequestException;
+import com.example.empleados.exception.ConflictException;
 import com.example.empleados.repository.DepartamentoRepository;
 import com.example.empleados.repository.EmpleadoRepository;
 
@@ -31,7 +32,7 @@ public class DepartamentoRulesValidator {
 
     public void validarClaveUnica(String claveNormalizada) {
         if (departamentoRepository.existsByClaveIgnoreCase(claveNormalizada)) {
-            throw new BadRequestException("Ya existe un departamento con clave " + claveNormalizada);
+            throw new ConflictException("Ya existe un departamento con clave " + claveNormalizada);
         }
     }
 

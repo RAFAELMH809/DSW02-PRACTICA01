@@ -111,3 +111,12 @@ obligatoria por `clave`, reutilizando la estructura actual de paquetes, segurida
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
 | Ninguna | N/A | N/A |
+
+## Principle VI Dependency Note
+
+La validacion completa de Principle VI para este feature depende de una capa frontend que no forma parte del backend Spring Boot.
+Para mantener trazabilidad ejecutable, se agregaron estos entregables en el repositorio:
+
+- Contrato de autenticacion de Departamentos: `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml`.
+- Flujo frontend secuencial de login (Empleados -> Departamentos): `frontend/src/app/app.html` y `frontend/src/app/app.ts`.
+- Evidencia E2E Cypress del flujo secuencial: `frontend/cypress/e2e/auth/login-empleados-departamentos.cy.ts`.

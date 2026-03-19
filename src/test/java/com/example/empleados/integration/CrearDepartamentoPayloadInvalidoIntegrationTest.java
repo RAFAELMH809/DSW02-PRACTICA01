@@ -1,6 +1,8 @@
 package com.example.empleados.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,29 +14,25 @@ import org.springframework.http.ResponseEntity;
 import com.example.empleados.dto.DepartamentoRequest;
 import com.example.empleados.dto.ErrorResponse;
 
-class CrearDepartamentoClaveDuplicadaIntegrationTest extends BaseIntegrationTest {
+class CrearDepartamentoPayloadInvalidoIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    void shouldFailWhenClaveAlreadyExistsIgnoringCase() {
-        DepartamentoRequest first = new DepartamentoRequest();
-        first.setClave("RH");
-        first.setNombre("Recursos Humanos");
-
-        DepartamentoRequest second = new DepartamentoRequest();
-        second.setClave("rh");
-        second.setNombre("Otra Area");
-
+    void shouldReturnClearValidationMessageForInvalidPayload() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        testRestTemplate.withBasicAuth("admin", "admin123")
-                .exchange("/api/v2/departamentos", HttpMethod.POST,
-                        new HttpEntity<>(first, headers), Object.class);
+        DepartamentoRequest request = new DepartamentoRequest();
+        request.setClave("RH");
+        request.setNombre(" ");
 
         ResponseEntity<ErrorResponse> response = testRestTemplate.withBasicAuth("admin", "admin123")
                 .exchange("/api/v2/departamentos", HttpMethod.POST,
-                        new HttpEntity<>(second, headers), ErrorResponse.class);
+                        new HttpEntity<>(request, headers), ErrorResponse.class);
 
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        ErrorResponse body = response.getBody();
+        assertNotNull(body);
+        assertEquals("VALIDATION_ERROR", body.getCode());
+        assertTrue(body.getMessage().toLowerCase().contains("nombre"));
     }
 }

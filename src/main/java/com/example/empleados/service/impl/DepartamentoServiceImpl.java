@@ -3,7 +3,9 @@ package com.example.empleados.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,7 @@ import com.example.empleados.domain.Departamento;
 import com.example.empleados.dto.DepartamentoRequest;
 import com.example.empleados.dto.DepartamentoResponse;
 import com.example.empleados.dto.DepartamentoUpdateRequest;
+import com.example.empleados.exception.BadRequestException;
 import com.example.empleados.exception.NotFoundException;
 import com.example.empleados.repository.DepartamentoRepository;
 import com.example.empleados.repository.EmpleadoRepository;
@@ -53,7 +56,15 @@ public class DepartamentoServiceImpl implements DepartamentoService {
     @Override
     @Transactional(readOnly = true)
     public Page<DepartamentoResponse> listar(Pageable pageable) {
-        return departamentoRepository.findAll(pageable).map(this::mapResponse);
+        if (pageable.getPageSize() > 100) {
+            throw new BadRequestException("El parametro size no puede ser mayor a 100");
+        }
+
+        Pageable normalizedPageable = pageable.getSort().isSorted()
+                ? pageable
+                : PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "clave"));
+
+        return departamentoRepository.findAll(normalizedPageable).map(this::mapResponse);
     }
 
     @Override

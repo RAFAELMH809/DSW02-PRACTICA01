@@ -99,7 +99,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/DepartamentoResponse'
         '400':
-          description: Datos invalidos o clave duplicada
+          description: Datos invalidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Clave duplicada
           content:
             application/json:
               schema:
@@ -109,6 +115,7 @@ paths:
 
     get:
       summary: Listar departamentos (paginado)
+      description: Devuelve departamentos paginados. Si no se envian parametros, usa `page=0` y `size=10`. El orden por defecto es `clave ASC`.
       tags: [Departamentos]
       security:
         - bearerAuth: []
@@ -126,10 +133,13 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 100
             default: 10
       responses:
         '200':
           description: Pagina de departamentos
+        '400':
+          description: Parametros de paginacion invalidos (ej. `size > 100`)
         '401':
           description: No autorizado
 

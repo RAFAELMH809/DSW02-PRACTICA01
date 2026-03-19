@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.empleados.dto.ErrorResponse;
 import com.example.empleados.exception.BadRequestException;
+import com.example.empleados.exception.ConflictException;
 import com.example.empleados.exception.NotFoundException;
 
 @RestControllerAdvice
@@ -23,6 +24,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("BAD_REQUEST", exception.getMessage()));
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handleConflict(ConflictException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse("CONFLICT", exception.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

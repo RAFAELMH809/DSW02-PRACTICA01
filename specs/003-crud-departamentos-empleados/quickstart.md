@@ -75,3 +75,11 @@ mvn test
 - Integracion obligatoria con empleados por `departamentoClave`.
 - Migracion historica con `SIN_DEPTO` aplicada.
 - Auditoria de escrituras y criterios de calidad verificables.
+
+## Validacion manual (2026-03-19)
+
+- Se ejecuto validacion de comandos de calidad y regresion del feature:
+  - `mvn "-Dtest=com.example.empleados.**.*Test" test` -> `43` pruebas en verde.
+  - `mvn "-Dtest=DepartamentosPerformanceIntegrationTest" test` -> `p95_ms=104` (< 2000 ms).
+- En entorno local se detecto una inconsistencia operativa al levantar `spring-boot:run` en perfil `dev` sin sobreescribir datasource (`password authentication failed` para `empleados_user`), causada por configuracion/estado local de base de datos.
+- Para smoke reproducible se recomienda ejecutar primero el ciclo Compose en entorno limpio o alinear credenciales/puerto del datasource local con `docker/docker-compose.yml`.

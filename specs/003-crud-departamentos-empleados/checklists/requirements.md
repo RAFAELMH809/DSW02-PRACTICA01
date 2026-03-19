@@ -32,3 +32,5 @@
 ## Notes
 
 - Validation result: pass (all checklist items satisfied in first iteration).
+- Polish closure (2026-03-19): pruebas de rendimiento, recorrido paginado, inmutabilidad de clave y payload invalido implementadas y en verde.
+- Evidencias complementarias: `checklists/audit.md`, `checklists/performance.md`, `checklists/environment.md`, `checklists/acceptance.md`.

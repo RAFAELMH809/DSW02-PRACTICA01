@@ -1,0 +1,249 @@
+<div class="app-shell">
+  <section class="hero">
+    <p class="kicker">Angular Frontend</p>
+    <h1>Control de Departamentos</h1>
+    <p class="subtitle">
+      Empleados habilita su propio CRUD. Departamentos se habilita al completar el login secuencial.
+    </p>
+  </section>
+
+  <section class="panel-grid">
+    <article class="card">
+      <h2 class="card-title">1) Login Empleados</h2>
+      <span class="status-chip" [class.done]="empleadosAutenticado()" data-testid="empleados-status">
+        {{ empleadosAutenticado() ? 'Autenticado' : 'Pendiente' }}
+      </span>
+
+      <div class="input-group">
+        <input
+          type="text"
+          placeholder="Usuario"
+          [(ngModel)]="empleadosLogin.username"
+          data-testid="empleados-user"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="empleadosLogin.password"
+          data-testid="empleados-pass"
+        />
+      </div>
+
+      <div class="actions">
+        <button
+          type="button"
+          (click)="autenticar('empleados')"
+          [disabled]="cargando()"
+          data-testid="empleados-login-btn"
+        >
+          Login Empleados
+        </button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2 class="card-title">2) Login Departamentos</h2>
+      <span class="status-chip" [class.done]="departamentosAutenticado()" data-testid="departamentos-status">
+        {{ departamentosAutenticado() ? 'Autenticado' : 'Pendiente' }}
+      </span>
+
+      <div class="input-group">
+        <input
+          type="text"
+          placeholder="Usuario"
+          [(ngModel)]="departamentosLogin.username"
+          data-testid="departamentos-user"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="departamentosLogin.password"
+          data-testid="departamentos-pass"
+        />
+      </div>
+
+      <div class="actions">
+        <button
+          type="button"
+          class="secondary"
+          (click)="autenticar('departamentos')"
+          [disabled]="cargando() || !empleadosAutenticado()"
+          data-testid="departamentos-login-btn"
+        >
+          Login Departamentos
+        </button>
+      </div>
+    </article>
+  </section>
+
+  <section class="messages" aria-live="polite">
+    @if (mensaje()) {
+      <p class="ok" data-testid="ok-msg">{{ mensaje() }}</p>
+    }
+    @if (error()) {
+      <p class="err" data-testid="err-msg">{{ error() }}</p>
+    }
+  </section>
+
+  @if (empleadosAutenticado()) {
+    <section class="dash">
+      <article class="card">
+        <h3 class="card-title">Nuevo empleado</h3>
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Nombre"
+            [(ngModel)]="nuevoEmpleado.nombre"
+            data-testid="new-emp-nombre"
+          />
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Direccion"
+            [(ngModel)]="nuevoEmpleado.direccion"
+            data-testid="new-emp-direccion"
+          />
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Telefono"
+            [(ngModel)]="nuevoEmpleado.telefono"
+            data-testid="new-emp-telefono"
+          />
+          <input
+            type="text"
+            maxlength="30"
+            placeholder="Departamento (ej. SIN_DEPTO)"
+            [(ngModel)]="nuevoEmpleado.departamentoClave"
+            data-testid="new-emp-departamento"
+          />
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            (click)="crearEmpleado()"
+            [disabled]="cargando() || !nuevoEmpleado.nombre || !nuevoEmpleado.direccion || !nuevoEmpleado.telefono || !nuevoEmpleado.departamentoClave"
+            data-testid="crear-empleado-btn"
+          >
+            Crear empleado
+          </button>
+          <button
+            type="button"
+            class="secondary"
+            (click)="cargarEmpleados()"
+            [disabled]="cargando()"
+            data-testid="listar-empleados-btn"
+          >
+            Refrescar empleados
+          </button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="card-title">Empleados ({{ empleadosTotal() }})</h3>
+        <div class="dept-grid" data-testid="emp-list">
+          @for (e of empleados(); track e.clave) {
+            <div class="dept-item">
+              @if (editandoEmpleadoClave() === e.clave) {
+                <div class="input-group compact">
+                  <input type="text" [(ngModel)]="empleadoEdicion.nombre" placeholder="Nombre" />
+                  <input type="text" [(ngModel)]="empleadoEdicion.direccion" placeholder="Direccion" />
+                  <input type="text" [(ngModel)]="empleadoEdicion.telefono" placeholder="Telefono" />
+                  <input type="text" [(ngModel)]="empleadoEdicion.departamentoClave" placeholder="Departamento" />
+                </div>
+                <div class="actions">
+                  <button
+                    type="button"
+                    (click)="guardarEdicionEmpleado(e.clave)"
+                    [disabled]="cargando() || !empleadoEdicion.nombre || !empleadoEdicion.direccion || !empleadoEdicion.telefono || !empleadoEdicion.departamentoClave"
+                  >
+                    Guardar
+                  </button>
+                  <button type="button" class="secondary" (click)="cancelarEdicionEmpleado()">Cancelar</button>
+                </div>
+              } @else {
+                <h4>{{ e.clave }}</h4>
+                <p>{{ e.nombre }}</p>
+                <p>{{ e.direccion }}</p>
+                <p>{{ e.telefono }}</p>
+                <p>Depto: {{ e.departamentoClave }}</p>
+                <div class="actions mt-sm">
+                  <button type="button" class="secondary" (click)="iniciarEdicionEmpleado(e)">Editar</button>
+                  <button type="button" class="warn" (click)="eliminarEmpleado(e.clave)">Eliminar</button>
+                </div>
+              }
+            </div>
+          }
+          @empty {
+            <p>No hay empleados para mostrar.</p>
+          }
+        </div>
+      </article>
+    </section>
+  }
+
+  @if (loginCompleto) {
+    <section class="dash">
+      <article class="card">
+        <h3 class="card-title">Nuevo departamento</h3>
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="20"
+            placeholder="Clave (ej. RH)"
+            [(ngModel)]="nuevoDepartamento.clave"
+            data-testid="new-clave"
+          />
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Nombre del departamento"
+            [(ngModel)]="nuevoDepartamento.nombre"
+            data-testid="new-nombre"
+          />
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            (click)="crearDepartamento()"
+            [disabled]="cargando() || !nuevoDepartamento.clave || !nuevoDepartamento.nombre"
+            data-testid="crear-departamento-btn"
+          >
+            Crear
+          </button>
+          <button
+            type="button"
+            class="secondary"
+            (click)="cargarDepartamentos()"
+            [disabled]="cargando()"
+            data-testid="listar-departamentos-btn"
+          >
+            Refrescar listado
+          </button>
+          <button type="button" class="warn" (click)="cerrarSesion()" data-testid="logout-btn">Salir</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="card-title">Departamentos ({{ total() }})</h3>
+        <div class="dept-grid" data-testid="dept-list">
+          @for (d of departamentos(); track d.clave) {
+            <div class="dept-item">
+              <h4>{{ d.clave }}</h4>
+              <p>{{ d.nombre }}</p>
+              <p>Empleados: {{ d.employeeCount }}</p>
+            </div>
+          }
+          @empty {
+            <p>No hay departamentos para mostrar.</p>
+          }
+        </div>
+      </article>
+    </section>
+  }
+</div>
