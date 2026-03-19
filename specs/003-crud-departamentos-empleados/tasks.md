@@ -161,6 +161,14 @@
 - [ ] T060 [P] Publicar evidencia de rendimiento en `specs/003-crud-departamentos-empleados/checklists/performance.md`
 - [ ] T061 Ejecutar suite de regresion empleados+departamentos en `src/test/java/com/example/empleados`
 - [ ] T062 Ejecutar validacion manual de quickstart en `specs/003-crud-departamentos-empleados/quickstart.md`
+- [ ] T063 [P] Crear prueba de recorrido completo de paginas sin omisiones/duplicados en `src/test/java/com/example/empleados/integration/ListarDepartamentosRecorridoPaginasIntegrationTest.java`
+- [ ] T064 [P] Crear prueba de inmutabilidad de `clave` en actualizacion de departamento en `src/test/java/com/example/empleados/integration/ActualizarDepartamentoClaveInmutableIntegrationTest.java`
+- [ ] T065 [P] Crear prueba de validacion de payload invalido y mensaje de error claro en `src/test/java/com/example/empleados/integration/CrearDepartamentoPayloadInvalidoIntegrationTest.java`
+- [ ] T066 Ejecutar smoke test de reproducibilidad con Docker Compose en `specs/003-crud-departamentos-empleados/checklists/environment.md`
+- [ ] T067 Ejecutar prueba de aceptacion asistida para SC-004 y registrar evidencia en `specs/003-crud-departamentos-empleados/checklists/acceptance.md`
+- [ ] T068 Documentar dependencia externa de Principle VI (frontend/login secuencial) en `specs/003-crud-departamentos-empleados/plan.md`
+- [ ] T069 Crear contrato de login para Departamentos (`POST /api/v2/departamentos/auth/login`) en `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml`
+- [ ] T070 Ejecutar y registrar evidencia E2E Cypress de login de Empleados y Departamentos en `specs/003-crud-departamentos-empleados/checklists/frontend-auth-e2e.md`
 
 ---
 
@@ -202,7 +210,7 @@
 - US2 paralelizable: `T025`, `T026`, `T027`, `T028`, `T029`, `T030`, `T031`.
 - US3 paralelizable: `T037`, `T038`, `T039`, `T040`, `T041`.
 - US4 paralelizable: `T047`, `T048`, `T049`, `T050`, `T051`.
-- Polish paralelizable: `T057`, `T058`, `T059`, `T060`.
+- Polish paralelizable: `T057`, `T058`, `T059`, `T060`, `T063`, `T064`, `T065`, `T069`.
 
 ---
 
