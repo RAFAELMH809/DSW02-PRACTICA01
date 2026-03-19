@@ -23,7 +23,7 @@ class CrearEmpleadoClaveUnicaConcurrenteIntegrationTest extends BaseIntegrationT
             request.setNombre("Nombre " + i);
             request.setDireccion("Direccion " + i);
             request.setTelefono("Telefono " + i);
-
+        request.setDepartamentoClave("SIN_DEPTO");
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             ResponseEntity<EmpleadoResponse> response = testRestTemplate
@@ -37,3 +37,6 @@ class CrearEmpleadoClaveUnicaConcurrenteIntegrationTest extends BaseIntegrationT
         }
     }
 }
+
+
+

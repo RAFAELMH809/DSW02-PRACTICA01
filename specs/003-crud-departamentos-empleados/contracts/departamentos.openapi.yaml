@@ -1,0 +1,230 @@
+openapi: 3.0.3
+info:
+  title: API Empleados - Departamentos
+  version: 1.0.0
+  description: Contrato para CRUD de departamentos e integracion obligatoria con empleados.
+servers:
+  - url: http://localhost:8081
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    DepartamentoRequest:
+      type: object
+      required: [clave, nombre]
+      properties:
+        clave:
+          type: string
+          minLength: 1
+          maxLength: 30
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 100
+
+    DepartamentoUpdateRequest:
+      type: object
+      required: [nombre]
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 100
+
+    DepartamentoResponse:
+      type: object
+      required: [clave, nombre, employeeCount]
+      properties:
+        clave:
+          type: string
+        nombre:
+          type: string
+        employeeCount:
+          type: integer
+          minimum: 0
+
+    EmpleadoRequestV2:
+      type: object
+      required: [nombre, direccion, telefono, departamentoClave]
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 100
+        direccion:
+          type: string
+          minLength: 1
+          maxLength: 100
+        telefono:
+          type: string
+          minLength: 1
+          maxLength: 100
+        departamentoClave:
+          type: string
+          minLength: 1
+          maxLength: 30
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+paths:
+  /api/v2/departamentos:
+    post:
+      summary: Crear departamento
+      tags: [Departamentos]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartamentoRequest'
+      responses:
+        '201':
+          description: Departamento creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartamentoResponse'
+        '400':
+          description: Datos invalidos o clave duplicada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado
+
+    get:
+      summary: Listar departamentos (paginado)
+      tags: [Departamentos]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        '200':
+          description: Pagina de departamentos
+        '401':
+          description: No autorizado
+
+  /api/v2/departamentos/{clave}:
+    get:
+      summary: Obtener departamento por clave
+      tags: [Departamentos]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clave
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Departamento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartamentoResponse'
+        '404':
+          description: Departamento no encontrado
+        '401':
+          description: No autorizado
+
+    put:
+      summary: Actualizar nombre de departamento
+      tags: [Departamentos]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clave
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartamentoUpdateRequest'
+      responses:
+        '200':
+          description: Departamento actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartamentoResponse'
+        '400':
+          description: Datos invalidos
+        '404':
+          description: Departamento no encontrado
+        '401':
+          description: No autorizado
+
+    delete:
+      summary: Eliminar departamento
+      tags: [Departamentos]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clave
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Departamento eliminado
+        '400':
+          description: Eliminacion no permitida (con empleados asociados o clave SIN_DEPTO)
+        '404':
+          description: Departamento no encontrado
+        '401':
+          description: No autorizado
+
+  /api/v2/empleados:
+    post:
+      summary: Crear empleado (requiere departamentoClave)
+      tags: [Empleados]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmpleadoRequestV2'
+      responses:
+        '201':
+          description: Empleado creado
+        '400':
+          description: Datos invalidos o departamento inexistente
+        '401':
+          description: No autorizado

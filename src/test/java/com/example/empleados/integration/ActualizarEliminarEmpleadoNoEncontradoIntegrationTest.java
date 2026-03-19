@@ -1,7 +1,5 @@
 package com.example.empleados.integration;
 
-import com.example.empleados.dto.EmpleadoRequest;
-import com.example.empleados.dto.ErrorResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
@@ -11,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import com.example.empleados.dto.EmpleadoRequest;
+import com.example.empleados.dto.ErrorResponse;
+
 class ActualizarEliminarEmpleadoNoEncontradoIntegrationTest extends BaseIntegrationTest {
 
     @Test
@@ -19,7 +20,7 @@ class ActualizarEliminarEmpleadoNoEncontradoIntegrationTest extends BaseIntegrat
         request.setNombre("Carlos");
         request.setDireccion("Calle E");
         request.setTelefono("555-555");
-
+        request.setDepartamentoClave("SIN_DEPTO");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -39,7 +40,7 @@ class ActualizarEliminarEmpleadoNoEncontradoIntegrationTest extends BaseIntegrat
         request.setNombre("Carlos");
         request.setDireccion("Calle E");
         request.setTelefono("555-555");
-
+        request.setDepartamentoClave("SIN_DEPTO");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

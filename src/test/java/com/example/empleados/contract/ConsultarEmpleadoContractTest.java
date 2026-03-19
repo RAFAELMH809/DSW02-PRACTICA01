@@ -44,7 +44,7 @@ class ConsultarEmpleadoContractTest {
         empleado.setNombre("Ana");
         empleado.setDireccion("Calle 2");
         empleado.setTelefono("555-456");
-
+        empleado.setDepartamentoClave("SIN_DEPTO");
         Page<EmpleadoResponse> page = new PageImpl<>(List.of(empleado), PageRequest.of(0, 10), 1);
         Mockito.when(empleadoService.listar(Mockito.any())).thenReturn(page);
         Mockito.when(empleadoService.obtenerPorClave("EMP-10")).thenReturn(empleado);
@@ -60,3 +60,6 @@ class ConsultarEmpleadoContractTest {
                 .andExpect(jsonPath("$.clave").value("EMP-10"));
     }
 }
+
+
+

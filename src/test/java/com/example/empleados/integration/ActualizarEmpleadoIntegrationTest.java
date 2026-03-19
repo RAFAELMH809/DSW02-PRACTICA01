@@ -18,7 +18,7 @@ class ActualizarEmpleadoIntegrationTest extends BaseIntegrationTest {
         createRequest.setNombre("Jose");
         createRequest.setDireccion("Calle C");
         createRequest.setTelefono("555-333");
-
+        createRequest.setDepartamentoClave("SIN_DEPTO");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         EmpleadoResponse created = testRestTemplate.withBasicAuth("admin", "admin123")
@@ -30,7 +30,7 @@ class ActualizarEmpleadoIntegrationTest extends BaseIntegrationTest {
         updateRequest.setNombre("Jose Updated");
         updateRequest.setDireccion("Calle C2");
         updateRequest.setTelefono("555-334");
-
+        updateRequest.setDepartamentoClave("SIN_DEPTO");
         ResponseEntity<EmpleadoResponse> updatedResponse = testRestTemplate.withBasicAuth("admin", "admin123")
             .exchange("/api/v2/empleados/" + created.getClave(), HttpMethod.PUT, new HttpEntity<>(updateRequest, headers), EmpleadoResponse.class);
 
@@ -40,3 +40,6 @@ class ActualizarEmpleadoIntegrationTest extends BaseIntegrationTest {
         Assertions.assertEquals(created.getClave(), updatedBody.getClave());
     }
 }
+
+
+

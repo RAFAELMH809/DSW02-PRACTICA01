@@ -1,24 +1,19 @@
 <!--
 Sync Impact Report
-- Version change: template placeholder CONSTITUTION_VERSION → 1.0.0
+- Version change: 3.0.0 -> 3.1.0
 - Modified principles:
-	- placeholder PRINCIPLE_1_NAME → I. Plataforma Backend Obligatoria (Spring Boot 3 + Java 17)
-	- placeholder PRINCIPLE_2_NAME → II. Seguridad API con HTTP Basic
-	- placeholder PRINCIPLE_3_NAME → III. Persistencia PostgreSQL y Docker como estándar
-	- placeholder PRINCIPLE_4_NAME → IV. Contrato API y documentación OpenAPI/Swagger
-	- placeholder PRINCIPLE_5_NAME → V. Calidad verificable con pruebas automatizadas
+  - Ninguno
 - Added sections:
-	- Estándares Técnicos y Operativos
-	- Flujo de Desarrollo y Quality Gates
+  - Ninguna
 - Removed sections:
-	- Ninguna
+  - Ninguna
 - Templates requiring updates:
-	- ✅ updated: .specify/templates/plan-template.md
-	- ✅ updated: .specify/templates/spec-template.md
-	- ✅ updated: .specify/templates/tasks-template.md
-	- ⚠ pending: .specify/templates/commands/*.md (directorio no existe en este repositorio)
+  - ✅ no changes required: .specify/templates/plan-template.md
+  - ✅ no changes required: .specify/templates/spec-template.md
+  - ✅ no changes required: .specify/templates/tasks-template.md
+  - ✅ no action required: .specify/templates/commands/*.md (directorio no existe en este repositorio)
 - Follow-up TODOs:
-	- Ninguno
+  - Ninguno
 -->
 
 # DSW02-Practica01 Constitution
@@ -34,14 +29,15 @@ sin enmienda formal de esta constitución.
 Rationale: un stack único reduce complejidad operativa, acelera onboarding y mejora
 mantenibilidad.
 
-### II. Seguridad API con HTTP Basic
-Los endpoints protegidos MUST requerir autenticación HTTP Basic mediante Spring Security. Para
-este proyecto académico y por lineamiento explícito de cátedra, las credenciales de autenticación
-MUST ser `admin` como usuario y `admin123` como contraseña en los entornos de evaluación.
-En producción, HTTP Basic MUST operar exclusivamente sobre HTTPS.
+### II. Seguridad API con JWT Bearer
+Los endpoints protegidos MUST requerir autenticación JWT Bearer mediante Spring Security. El
+backend MUST exponer un flujo de login para emitir tokens firmados con expiración definida por
+entorno y validación de integridad/tiempo de vida en cada request protegida. Los secretos de
+firma MUST resolverse fuera del código fuente y rotarse por política operativa.
+En producción, JWT Bearer MUST operar exclusivamente sobre HTTPS.
 
-Rationale: HTTP Basic es el esquema elegido para este proyecto y el docente definió credenciales
-fijas para facilitar validación homogénea en laboratorio.
+Rationale: JWT Bearer habilita APIs stateless, mejora escalabilidad y permite control explícito de
+expiración/rechazo de tokens en contratos y pruebas automatizadas.
 
 ### III. Persistencia PostgreSQL y Docker como estándar
 La persistencia de datos MUST realizarse en PostgreSQL. El entorno local y de integración MUST
@@ -78,6 +74,8 @@ producción.
 - Contenedores MUST definirse en `docker-compose` para ejecución local y validación de integración.
 - Configuración sensible MUST estar fuera del repositorio y resolverse por entorno.
 - Logging de seguridad y errores MUST ser estructurado y suficiente para auditoría técnica.
+- El dominio organizacional MUST soportar CRUD de departamentos con `clave` y `nombre`, y la
+  relación obligatoria de cada `Empleado` con un `Departamento` válido.
 
 ## Flujo de Desarrollo y Quality Gates
 
@@ -100,4 +98,4 @@ Esta constitución prevalece sobre prácticas ad-hoc del repositorio.
 - Toda revisión de `plan.md` y PR MUST incluir una verificación explícita de cumplimiento.
 - Si existe conflicto entre documentos, este archivo y su versión vigente tienen prioridad.
 
-**Version**: 2.0.0 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-03-04
+**Version**: 3.1.0 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-03-12

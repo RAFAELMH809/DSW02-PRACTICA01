@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: API Empleados - Autenticacion JWT
+  version: 1.0.0
+  description: Contrato para login de empleados y acceso protegido con JWT Bearer.
+servers:
+  - url: http://localhost:8081
+paths:
+  /api/v2/auth/login:
+    post:
+      summary: Iniciar sesion de empleado
+      operationId: loginEmpleado
+      tags: [Autenticacion]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v2/empleados:
+    get:
+      summary: Listar empleados (protegido)
+      operationId: listarEmpleadosProtegido
+      tags: [Empleados]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        '200':
+          description: Pagina de empleados
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [correo, password]
+      properties:
+        correo:
+          type: string
+          format: email
+          maxLength: 100
+        password:
+          type: string
+          minLength: 1
+          maxLength: 255
+    LoginResponse:
+      type: object
+      required: [accessToken, tokenType, expiresAt]
+      properties:
+        accessToken:
+          type: string
+          description: JWT Bearer firmado por el backend.
+        tokenType:
+          type: string
+          example: Bearer
+        expiresAt:
+          type: string
+          format: date-time
+          description: Momento de expiracion (issuedAt + 60 minutos).
+
+  responses:
+    BadRequest:
+      description: Datos de autenticacion invalidos
+    Unauthorized:
+      description: Credenciales invalidas o token ausente/invalido/expirado

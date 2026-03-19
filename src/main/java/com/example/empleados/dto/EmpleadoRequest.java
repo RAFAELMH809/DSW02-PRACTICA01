@@ -17,6 +17,10 @@ public class EmpleadoRequest {
     @Size(max = 100)
     private String telefono;
 
+    @NotBlank
+    @Size(max = 30)
+    private String departamentoClave;
+
     public String getNombre() {
         return nombre;
     }
@@ -39,5 +43,13 @@ public class EmpleadoRequest {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getDepartamentoClave() {
+        return departamentoClave;
+    }
+
+    public void setDepartamentoClave(String departamentoClave) {
+        this.departamentoClave = departamentoClave;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.empleados.service;
 
+import java.util.Locale;
+
 import org.springframework.stereotype.Component;
 
 import com.example.empleados.domain.Empleado;
@@ -14,6 +16,7 @@ public class EmpleadoMapper {
         empleado.setNombre(request.getNombre().trim());
         empleado.setDireccion(request.getDireccion().trim());
         empleado.setTelefono(request.getTelefono().trim());
+        empleado.setDepartamentoClave(request.getDepartamentoClave().trim().toUpperCase(Locale.ROOT));
         return empleado;
     }
 
@@ -21,6 +24,7 @@ public class EmpleadoMapper {
         entity.setNombre(request.getNombre().trim());
         entity.setDireccion(request.getDireccion().trim());
         entity.setTelefono(request.getTelefono().trim());
+        entity.setDepartamentoClave(request.getDepartamentoClave().trim().toUpperCase(Locale.ROOT));
     }
 
     public EmpleadoResponse toResponse(Empleado empleado) {
@@ -35,6 +39,7 @@ public class EmpleadoMapper {
         response.setNombre(empleado.getNombre());
         response.setDireccion(empleado.getDireccion());
         response.setTelefono(empleado.getTelefono());
+        response.setDepartamentoClave(empleado.getDepartamentoClave());
         return response;
     }
 }

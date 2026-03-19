@@ -44,13 +44,13 @@ class CrearEmpleadoContractTest {
         request.setNombre("Juan");
         request.setDireccion("Calle 1");
         request.setTelefono("555-123");
-
+        request.setDepartamentoClave("SIN_DEPTO");
         EmpleadoResponse response = new EmpleadoResponse();
         response.setClave("EMP-1");
         response.setNombre("Juan");
         response.setDireccion("Calle 1");
         response.setTelefono("555-123");
-
+        response.setDepartamentoClave("SIN_DEPTO");
         Mockito.when(empleadoService.crear(Mockito.any())).thenReturn(response);
 
         mockMvc.perform(post("/api/v2/empleados")
@@ -61,3 +61,6 @@ class CrearEmpleadoContractTest {
                 .andExpect(jsonPath("$.clave").value("EMP-1"));
     }
 }
+
+
+

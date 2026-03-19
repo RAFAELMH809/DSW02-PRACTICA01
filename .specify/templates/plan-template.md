@@ -32,7 +32,7 @@
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
 - Stack gate: ¿El diseño usa Spring Boot 3.x con Java 17 sin frameworks alternos incompatibles?
-- Security gate: ¿Se define HTTP Basic para endpoints protegidos y manejo de secretos fuera de código?
+- Security gate: ¿Se define JWT Bearer para endpoints protegidos, emisión de token y manejo de secretos fuera de código?
 - Data gate: ¿PostgreSQL es la única persistencia principal y hay plan de migraciones versionadas?
 - Environment gate: ¿Existe estrategia Docker/Compose para entorno local/integración reproducible?
 - API contract gate: ¿Se contempla documentación OpenAPI 3/Swagger para endpoints nuevos o modificados?

@@ -44,13 +44,13 @@ class ActualizarEliminarEmpleadoContractTest {
         request.setNombre("Luis");
         request.setDireccion("Calle 3");
         request.setTelefono("555-789");
-
+        request.setDepartamentoClave("SIN_DEPTO");
         EmpleadoResponse response = new EmpleadoResponse();
         response.setClave("EMP-2");
         response.setNombre("Luis");
         response.setDireccion("Calle 3");
         response.setTelefono("555-789");
-
+        response.setDepartamentoClave("SIN_DEPTO");
         Mockito.when(empleadoService.actualizar(Mockito.eq("EMP-2"), Mockito.any())).thenReturn(response);
 
         mockMvc.perform(put("/api/v2/empleados/EMP-2")
@@ -64,3 +64,6 @@ class ActualizarEliminarEmpleadoContractTest {
                 .andExpect(status().isNoContent());
     }
 }
+
+
+

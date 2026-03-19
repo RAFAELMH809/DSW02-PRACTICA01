@@ -36,7 +36,7 @@ class EmpleadoValidationTest {
         request.setNombre("a".repeat(101));
         request.setDireccion("b".repeat(101));
         request.setTelefono("c".repeat(101));
-
+        request.setDepartamentoClave("SIN_DEPTO");
         Set<ConstraintViolation<EmpleadoRequest>> violations = validator.validate(request);
 
         Assertions.assertFalse(violations.isEmpty());
@@ -45,3 +45,6 @@ class EmpleadoValidationTest {
         Assertions.assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("telefono")));
     }
 }
+
+
+

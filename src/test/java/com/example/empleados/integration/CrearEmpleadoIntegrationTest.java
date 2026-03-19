@@ -19,7 +19,7 @@ class CrearEmpleadoIntegrationTest extends BaseIntegrationTest {
         request.setNombre("Pedro");
         request.setDireccion("Calle A");
         request.setTelefono("555-111");
-
+        request.setDepartamentoClave("SIN_DEPTO");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -34,3 +34,6 @@ class CrearEmpleadoIntegrationTest extends BaseIntegrationTest {
         Assertions.assertTrue(body.getClave().matches("^EMP-\\d+$"));
     }
 }
+
+
+

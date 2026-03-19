@@ -92,7 +92,7 @@
 
 **Constitution-aligned mandatory constraints (backend projects):**
 
-- **AUTH-001**: Protected endpoints MUST define HTTP Basic authentication behavior.
+- **AUTH-001**: Protected endpoints MUST define JWT Bearer authentication behavior.
 - **DATA-001**: Persisted data MUST target PostgreSQL and specify migration impact.
 - **ENV-001**: Local/integration execution MUST be reproducible via Docker/Compose.
 - **DOC-001**: New/changed endpoints MUST include OpenAPI/Swagger documentation requirements.

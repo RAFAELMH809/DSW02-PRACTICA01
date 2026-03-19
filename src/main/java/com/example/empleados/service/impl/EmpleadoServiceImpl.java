@@ -1,5 +1,7 @@
 package com.example.empleados.service.impl;
 
+import java.util.Locale;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,9 @@ import com.example.empleados.domain.Empleado;
 import com.example.empleados.domain.EmpleadoId;
 import com.example.empleados.dto.EmpleadoRequest;
 import com.example.empleados.dto.EmpleadoResponse;
+import com.example.empleados.exception.BadRequestException;
 import com.example.empleados.exception.NotFoundException;
+import com.example.empleados.repository.DepartamentoRepository;
 import com.example.empleados.repository.EmpleadoRepository;
 import com.example.empleados.service.EmpleadoMapper;
 import com.example.empleados.service.EmpleadoService;
@@ -20,19 +24,23 @@ import com.example.empleados.service.KeyGeneratorService;
 public class EmpleadoServiceImpl implements EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
+    private final DepartamentoRepository departamentoRepository;
     private final EmpleadoMapper empleadoMapper;
     private final KeyGeneratorService keyGeneratorService;
 
     public EmpleadoServiceImpl(EmpleadoRepository empleadoRepository,
+                               DepartamentoRepository departamentoRepository,
                                EmpleadoMapper empleadoMapper,
                                KeyGeneratorService keyGeneratorService) {
         this.empleadoRepository = empleadoRepository;
+        this.departamentoRepository = departamentoRepository;
         this.empleadoMapper = empleadoMapper;
         this.keyGeneratorService = keyGeneratorService;
     }
 
     @Override
     public EmpleadoResponse crear(EmpleadoRequest request) {
+        validarDepartamentoExiste(request.getDepartamentoClave());
         Empleado empleado = empleadoMapper.toEntity(request);
         String clave = keyGeneratorService.generarClave();
         String[] split = clave.split("-");
@@ -63,6 +71,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public EmpleadoResponse actualizar(String clave, EmpleadoRequest request) {
         keyGeneratorService.validarFormato(clave);
+        validarDepartamentoExiste(request.getDepartamentoClave());
         Empleado empleado = empleadoRepository.findByClave(clave)
                 .orElseThrow(() -> new NotFoundException("Empleado no encontrado para clave " + clave));
         empleadoMapper.updateEntity(empleado, request);
@@ -76,5 +85,12 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         Empleado empleado = empleadoRepository.findByClave(clave)
                 .orElseThrow(() -> new NotFoundException("Empleado no encontrado para clave " + clave));
         empleadoRepository.delete(empleado);
+    }
+
+    private void validarDepartamentoExiste(String departamentoClave) {
+        if (!departamentoRepository.existsByClaveIgnoreCase(departamentoClave)) {
+            throw new BadRequestException(
+                    "No existe el departamento con clave " + departamentoClave.trim().toUpperCase(Locale.ROOT));
+        }
     }
 }

@@ -19,7 +19,7 @@ class EliminarEmpleadoIntegrationTest extends BaseIntegrationTest {
         createRequest.setNombre("Laura");
         createRequest.setDireccion("Calle D");
         createRequest.setTelefono("555-444");
-
+        createRequest.setDepartamentoClave("SIN_DEPTO");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         EmpleadoResponse created = testRestTemplate.withBasicAuth("admin", "admin123")
@@ -33,3 +33,6 @@ class EliminarEmpleadoIntegrationTest extends BaseIntegrationTest {
         Assertions.assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
     }
 }
+
+
+

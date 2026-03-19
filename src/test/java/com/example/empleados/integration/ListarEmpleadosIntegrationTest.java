@@ -19,7 +19,7 @@ class ListarEmpleadosIntegrationTest extends BaseIntegrationTest {
         request.setNombre("Maria");
         request.setDireccion("Calle B");
         request.setTelefono("555-222");
-
+        request.setDepartamentoClave("SIN_DEPTO");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         testRestTemplate.withBasicAuth("admin", "admin123")
@@ -35,3 +35,6 @@ class ListarEmpleadosIntegrationTest extends BaseIntegrationTest {
         Assertions.assertFalse(body.get("content").isEmpty());
     }
 }
+
+
+

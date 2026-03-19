@@ -10,4 +10,6 @@ import com.example.empleados.domain.EmpleadoId;
 public interface EmpleadoRepository extends JpaRepository<Empleado, EmpleadoId> {
     Optional<Empleado> findByClave(String clave);
     boolean existsByClave(String clave);
+    boolean existsByDepartamentoClaveIgnoreCase(String departamentoClave);
+    long countByDepartamentoClaveIgnoreCase(String departamentoClave);
 }

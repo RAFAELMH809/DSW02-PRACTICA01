@@ -69,7 +69,7 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T008 Configure error handling and logging infrastructure
 - [ ] T009 Setup environment configuration management
 - [ ] T010 [P] Configure PostgreSQL container with Docker/Compose for local and integration runs
-- [ ] T011 [P] Configure HTTP Basic security baseline and credential sourcing by environment
+- [ ] T011 [P] Configure JWT Bearer security baseline (token issuance/validation) and secret sourcing by environment
 - [ ] T012 [P] Enable OpenAPI/Swagger generation and UI exposure policy per environment
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
