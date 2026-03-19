@@ -132,7 +132,7 @@ Como usuario autenticado, quiero crear y actualizar empleados indicando una `cla
 - **FR-011**: El sistema MUST exigir `departamento` obligatorio al crear empleados; no se permiten empleados sin departamento.
 - **FR-012**: En migracion de datos, el sistema MUST crear un departamento tecnico `SIN_DEPTO` y asignarlo a empleados historicos sin departamento antes de imponer restriccion obligatoria.
 - **FR-013**: En operaciones de empleados, la referencia de departamento MUST realizarse mediante `clave` de departamento.
-- **FR-014**: El sistema MUST prohibir la eliminacion del departamento tecnico `SIN_DEPTO` en cualquier circunstancia.
+- **FR-014**: Ante intento de eliminar `SIN_DEPTO`, el sistema MUST responder error de negocio explicito con mensaje claro y codigo HTTP consistente con el contrato OpenAPI.
 - **FR-015**: El sistema MUST registrar en log cada operacion de creacion, actualizacion y eliminacion de departamento, incluyendo identidad del usuario autenticado, tipo de operacion y marca de tiempo.
 
 **Constitution-aligned mandatory constraints (backend projects):**

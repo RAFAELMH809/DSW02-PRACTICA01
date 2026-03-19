@@ -168,7 +168,7 @@
 - [ ] T067 Ejecutar prueba de aceptacion asistida para SC-004 y registrar evidencia en `specs/003-crud-departamentos-empleados/checklists/acceptance.md`
 - [ ] T068 Documentar dependencia externa de Principle VI (frontend/login secuencial) en `specs/003-crud-departamentos-empleados/plan.md`
 - [ ] T069 Crear contrato de login para Departamentos (`POST /api/v2/departamentos/auth/login`) en `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml`
-- [ ] T070 Ejecutar y registrar evidencia E2E Cypress de login de Empleados y Departamentos en `specs/003-crud-departamentos-empleados/checklists/frontend-auth-e2e.md`
+- [ ] T070 Implementar y ejecutar prueba E2E Cypress para login Empleados+Departamentos en `frontend/cypress/e2e/auth/login-empleados-departamentos.cy.ts`
 - [ ] T071 [P] [US2] Crear prueba de defaults de paginacion (`page=0`, `size=10`) sin query params en `src/test/java/com/example/empleados/integration/ListarDepartamentosDefaultsPaginacionIntegrationTest.java`
 - [ ] T072 [P] [US1] Crear prueba de `POST /api/v2/departamentos` sin token (`401`) en `src/test/java/com/example/empleados/integration/CrearDepartamentoSinTokenIntegrationTest.java`
 - [ ] T073 [P] [US3] Crear prueba de `PUT /api/v2/departamentos/{clave}` sin token (`401`) en `src/test/java/com/example/empleados/integration/ActualizarDepartamentoSinTokenIntegrationTest.java`

@@ -38,7 +38,7 @@ departamento tecnico `SIN_DEPTO` y vincular empleados historicos sin departament
 - Environment gate: **PASS** - El proyecto ya usa Docker/Compose y Testcontainers para ejecucion reproducible.
 - API contract gate: **PASS** - Se contempla contrato OpenAPI para endpoints nuevos y ajustes del contrato de empleados.
 - Quality gate: **PASS** - Se definira cobertura unitaria, integracion y contrato para CRUD de departamentos y relacion con empleados.
-- Frontend gate (Principle VI): **PARTIAL (N/A condicionado)** - Este feature es backend-only y no implementa Angular 22 LTS ni flujos Cypress/login. Para el camino de Empleados existe artefacto verificable de autenticacion en `specs/001-autenticacion-empleados/contracts/autenticacion.openapi.yaml` (endpoint `POST /api/v2/auth/login`). El segundo camino (login de Departamentos) queda como dependencia pendiente y su criterio de salida verificable es contar con contrato OpenAPI en `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml` que documente `POST /api/v2/departamentos/auth/login` y pruebas E2E Cypress asociadas en el repositorio frontend.
+- Frontend gate (Principle VI): **PASS (condicionado a entregables del plan)** - Se mantiene trazabilidad del camino de Empleados con `specs/001-autenticacion-empleados/contracts/autenticacion.openapi.yaml` (endpoint `POST /api/v2/auth/login`) y este plan incluye entregables verificables para el camino de Departamentos: contrato `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml` (`POST /api/v2/departamentos/auth/login`) y evidencia E2E Cypress en `frontend/cypress/e2e/auth/login-empleados-departamentos.cy.ts`.
 
 ## Constitution Check (Post-Phase 1 Design)
 
@@ -48,7 +48,7 @@ departamento tecnico `SIN_DEPTO` y vincular empleados historicos sin departament
 - Environment gate: **PASS** - La estrategia local/integracion sigue soportada por Docker Compose y perfiles Spring.
 - API contract gate: **PASS** - El contrato OpenAPI para departamentos y la actualizacion del contrato de empleados quedan planificados en `tasks.md`.
 - Quality gate: **PASS** - La cobertura de pruebas (contrato/integracion/seguridad/auditoria/performance) queda planificada en `tasks.md` y se valida durante implementacion.
-- Frontend gate (Principle VI): **PARTIAL (N/A condicionado)** - El diseno de Phase 1 se limita a contratos y modelo backend, por lo que no materializa Angular/Cypress ni las dos rutas de login. Se valida trazabilidad del camino de Empleados con `specs/001-autenticacion-empleados/contracts/autenticacion.openapi.yaml`; permanece pendiente el camino de Departamentos hasta disponer del artefacto `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml` y su suite Cypress de login en frontend.
+- Frontend gate (Principle VI): **PASS (condicionado a entregables del plan)** - El diseno incorpora trazabilidad completa: camino Empleados ya documentado en `specs/001-autenticacion-empleados/contracts/autenticacion.openapi.yaml`, y camino Departamentos definido mediante contrato `specs/003-crud-departamentos-empleados/contracts/departamentos-autenticacion.openapi.yaml` mas prueba E2E Cypress `frontend/cypress/e2e/auth/login-empleados-departamentos.cy.ts`.
 
 ## Project Structure
 
@@ -65,7 +65,7 @@ specs/003-crud-departamentos-empleados/
 │   ├── acceptance.md
 │   └── frontend-auth-e2e.md
 ├── contracts/
-│   └── departamentos.openapi.yaml
+│   ├── departamentos.openapi.yaml
 │   └── departamentos-autenticacion.openapi.yaml
 └── tasks.md
 ```
@@ -110,4 +110,4 @@ obligatoria por `clave`, reutilizando la estructura actual de paquetes, segurida
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| Principle VI (Frontend gate) en estado PARTIAL (N/A condicionado) | El alcance aprobado del feature es backend-only y se prioriza cerrar contratos y reglas de negocio de departamentos/empleados sin bloquear la entrega por UI Angular. Ya existe evidencia verificable del camino de Empleados en `specs/001-autenticacion-empleados/contracts/autenticacion.openapi.yaml`; el camino de login de Departamentos depende de un frente posterior. | Marcar PASS ahora seria incorrecto porque aun no existen implementacion Angular 22 LTS ni pruebas Cypress para login de Departamentos. Cambiar alcance para incluir frontend en este feature rompe la planificacion y dependencias definidas en el backlog. |
+| Ninguna | N/A | N/A |
