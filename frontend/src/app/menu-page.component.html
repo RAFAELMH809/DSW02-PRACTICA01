@@ -1,0 +1,29 @@
+<div class="screen-shell">
+  <section class="hero">
+    <p class="kicker">Menu Principal</p>
+    <h1>Selecciona Modulo</h1>
+    <p class="subtitle">Elige el CRUD que deseas administrar.</p>
+  </section>
+
+  <section class="panel-grid">
+    <article class="card">
+      <h2 class="card-title">Empleados</h2>
+      <p>Gestion completa de empleados: alta, consulta, edicion y eliminacion.</p>
+      <div class="actions">
+        <a class="btn-link" routerLink="/empleados" data-testid="go-empleados">Abrir CRUD Empleados</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2 class="card-title">Departamentos</h2>
+      <p>Gestion completa de departamentos: alta y consulta paginada.</p>
+      <div class="actions">
+        <a class="btn-link" routerLink="/departamentos" data-testid="go-departamentos">Abrir CRUD Departamentos</a>
+      </div>
+    </article>
+  </section>
+
+  <div class="actions mt-md">
+    <button type="button" class="warn" (click)="logout()" data-testid="logout-btn">Cerrar sesion</button>
+  </div>
+</div>

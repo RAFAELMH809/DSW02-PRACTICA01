@@ -1,0 +1,96 @@
+<div class="screen-shell">
+  <section class="hero">
+    <p class="kicker">Modulo</p>
+    <h1>CRUD Empleados</h1>
+    <p class="subtitle">Administracion de empleados en pantalla dedicada.</p>
+  </section>
+
+  <div class="actions">
+    <a class="btn-link secondary" routerLink="/menu">Volver al menu</a>
+  </div>
+
+  <section class="messages" aria-live="polite">
+    @if (mensaje()) {
+      <p class="ok">{{ mensaje() }}</p>
+    }
+    @if (error()) {
+      <p class="err">{{ error() }}</p>
+    }
+  </section>
+
+  <section class="dash">
+    <article class="card">
+      <h2 class="card-title">Nuevo empleado</h2>
+      <div class="input-group">
+        <input type="text" maxlength="100" placeholder="Nombre" [(ngModel)]="nuevoEmpleado.nombre" />
+        <input type="text" maxlength="100" placeholder="Direccion" [(ngModel)]="nuevoEmpleado.direccion" />
+        <input type="text" maxlength="100" placeholder="Telefono" [(ngModel)]="nuevoEmpleado.telefono" />
+        <div class="select-wrap">
+          <select [(ngModel)]="nuevoEmpleado.departamentoClave" [ngModelOptions]="{ standalone: true }" aria-label="Departamento del empleado">
+            @for (clave of departamentosDisponibles(); track clave) {
+              <option [value]="clave">{{ clave }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button
+          type="button"
+          (click)="crearEmpleado()"
+          [disabled]="cargando() || !nuevoEmpleado.nombre || !nuevoEmpleado.direccion || !nuevoEmpleado.telefono || !nuevoEmpleado.departamentoClave"
+        >
+          Crear empleado
+        </button>
+        <button type="button" class="secondary" (click)="cargarEmpleados()" [disabled]="cargando()">Refrescar</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2 class="card-title">Empleados ({{ empleadosTotal() }})</h2>
+      <div class="dept-grid">
+        @for (e of empleados(); track e.clave) {
+          <div class="dept-item">
+            @if (editandoEmpleadoClave() === e.clave) {
+              <div class="input-group compact">
+                <input type="text" [(ngModel)]="empleadoEdicion.nombre" placeholder="Nombre" />
+                <input type="text" [(ngModel)]="empleadoEdicion.direccion" placeholder="Direccion" />
+                <input type="text" [(ngModel)]="empleadoEdicion.telefono" placeholder="Telefono" />
+                <div class="select-wrap">
+                  <select [(ngModel)]="empleadoEdicion.departamentoClave" [ngModelOptions]="{ standalone: true }" aria-label="Departamento del empleado en edicion">
+                    @for (clave of departamentosDisponibles(); track clave) {
+                      <option [value]="clave">{{ clave }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+              <div class="actions">
+                <button
+                  type="button"
+                  (click)="guardarEdicionEmpleado(e.clave)"
+                  [disabled]="cargando() || !empleadoEdicion.nombre || !empleadoEdicion.direccion || !empleadoEdicion.telefono || !empleadoEdicion.departamentoClave"
+                >
+                  Guardar
+                </button>
+                <button type="button" class="secondary" (click)="cancelarEdicionEmpleado()">Cancelar</button>
+              </div>
+            } @else {
+              <h4>{{ e.clave }}</h4>
+              <p>{{ e.nombre }}</p>
+              <p>{{ e.direccion }}</p>
+              <p>{{ e.telefono }}</p>
+              <p>Depto: {{ e.departamentoClave }}</p>
+              <div class="actions mt-sm">
+                <button type="button" class="secondary" (click)="iniciarEdicionEmpleado(e)">Editar</button>
+                <button type="button" class="warn" (click)="eliminarEmpleado(e.clave)">Eliminar</button>
+              </div>
+            }
+          </div>
+        }
+        @empty {
+          <p>No hay empleados para mostrar.</p>
+        }
+      </div>
+    </article>
+  </section>
+</div>

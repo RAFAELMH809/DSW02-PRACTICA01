@@ -1,0 +1,57 @@
+<div class="screen-shell">
+  <section class="hero">
+    <p class="kicker">Modulo</p>
+    <h1>CRUD Departamentos</h1>
+    <p class="subtitle">Administracion de departamentos en pantalla dedicada.</p>
+  </section>
+
+  <div class="actions">
+    <a class="btn-link secondary" routerLink="/menu">Volver al menu</a>
+  </div>
+
+  <section class="messages" aria-live="polite">
+    @if (mensaje()) {
+      <p class="ok">{{ mensaje() }}</p>
+    }
+    @if (error()) {
+      <p class="err">{{ error() }}</p>
+    }
+  </section>
+
+  <section class="dash">
+    <article class="card">
+      <h2 class="card-title">Nuevo departamento</h2>
+      <div class="input-group">
+        <input type="text" maxlength="20" placeholder="Clave (ej. RH)" [(ngModel)]="nuevoDepartamento.clave" />
+        <input type="text" maxlength="100" placeholder="Nombre del departamento" [(ngModel)]="nuevoDepartamento.nombre" />
+      </div>
+
+      <div class="actions">
+        <button
+          type="button"
+          (click)="crearDepartamento()"
+          [disabled]="cargando() || !nuevoDepartamento.clave || !nuevoDepartamento.nombre"
+        >
+          Crear
+        </button>
+        <button type="button" class="secondary" (click)="cargarDepartamentos()" [disabled]="cargando()">Refrescar</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2 class="card-title">Departamentos ({{ total() }})</h2>
+      <div class="dept-grid">
+        @for (d of departamentos(); track d.clave) {
+          <div class="dept-item">
+            <h4>{{ d.clave }}</h4>
+            <p>{{ d.nombre }}</p>
+            <p>Empleados: {{ d.employeeCount }}</p>
+          </div>
+        }
+        @empty {
+          <p>No hay departamentos para mostrar.</p>
+        }
+      </div>
+    </article>
+  </section>
+</div>

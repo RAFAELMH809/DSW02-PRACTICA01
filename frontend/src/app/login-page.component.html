@@ -1,0 +1,35 @@
+<div class="screen-shell login-shell">
+  <article class="card card-narrow login-card">
+    <p class="kicker">Control de Acceso</p>
+    <h1>TUF Operations Console</h1>
+    <p class="subtitle">Inicia sesion para entrar al menu principal.</p>
+    <h2 class="card-title">Login</h2>
+
+    <form class="input-group" (ngSubmit)="login()">
+      <input
+        type="text"
+        placeholder="Usuario"
+        [(ngModel)]="username"
+        name="username"
+        required
+        data-testid="login-user"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        name="password"
+        required
+        data-testid="login-pass"
+      />
+
+      <button type="submit" [disabled]="cargando()" data-testid="login-btn">
+        {{ cargando() ? 'Ingresando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    @if (error()) {
+      <p class="err" data-testid="login-error">{{ error() }}</p>
+    }
+  </article>
+</div>
