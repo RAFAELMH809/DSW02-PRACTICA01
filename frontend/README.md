@@ -12,6 +12,26 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## Docker (Nginx only for frontend)
+
+This frontend can run in its own container with Nginx, separate from the backend compose.
+
+Run from `frontend/`:
+
+```bash
+docker compose -f docker-compose.frontend.yml up --build -d
+```
+
+Then open:
+
+- `http://localhost:4200`
+
+Notes:
+
+- Frontend routes are served with SPA fallback (`index.html`).
+- `/api/*` is proxied by Nginx to `http://host.docker.internal:8081/api/*`.
+- Keep the backend running on port `8081`.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
@@ -49,10 +69,10 @@ ng test
 For end-to-end (e2e) testing, run:
 
 ```bash
-ng e2e
+npx cypress run
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+This project standardizes Cypress as the required E2E framework for frontend critical flows.
 
 ## Additional Resources
 

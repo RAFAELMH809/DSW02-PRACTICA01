@@ -1,17 +1,19 @@
 <!--
 Sync Impact Report
-- Version change: 3.1.0 -> 3.2.0
+- Version change: 3.2.0 -> 3.2.1
 - Modified principles:
-  - Ninguno
-- Added sections:
+  - V. Calidad verificable con pruebas automatizadas
   - VI. Frontend Web Obligatorio (Angular 22 LTS + Cypress)
+- Added sections:
+  - Ninguna
 - Removed sections:
   - Ninguna
 - Templates requiring updates:
-  - ✅ no changes required: .specify/templates/plan-template.md
-  - ✅ no changes required: .specify/templates/spec-template.md
-  - ✅ no changes required: .specify/templates/tasks-template.md
+  - ✅ updated: .specify/templates/plan-template.md
+  - ✅ updated: .specify/templates/spec-template.md
+  - ✅ updated: .specify/templates/tasks-template.md
   - ✅ no action required: .specify/templates/commands/*.md (directorio no existe en este repositorio)
+  - ✅ updated: frontend/README.md
 - Follow-up TODOs:
   - Ninguno
 -->
@@ -60,17 +62,20 @@ equipos consumidores.
 ### V. Calidad verificable con pruebas automatizadas
 Cada cambio MUST incluir pruebas automáticas proporcionales al riesgo: unitarias para lógica de
 negocio y seguridad, e integración para repositorios y flujos autenticados contra PostgreSQL en
-contenedor. El pipeline MUST bloquear merge ante fallas de tests, migraciones o build.
+contenedor. Para funcionalidades web frontend, las pruebas E2E MUST ejecutarse con Cypress en
+flujos críticos de autenticación y CRUD. El pipeline MUST bloquear merge ante fallas de tests,
+migraciones o build.
 
 Rationale: la calidad verificable protege el contrato API, la seguridad y la estabilidad en
 producción.
 
 ### VI. Frontend Web Obligatorio (Angular 22 LTS + Cypress)
 El frontend oficial del proyecto MUST implementarse en Angular 22 LTS. Las pruebas del frontend
-MUST ejecutarse con Cypress para validar flujos críticos de autenticación y CRUD. La aplicación
-web MUST exponer dos caminos de autenticación independientes: uno para el CRUD de Empleados y
-otro para el CRUD de Departamentos. El orden de entrega MUST ser secuencial: primero se entrega
-el login de Empleados y después se implementa el login de Departamentos.
+MUST ejecutarse con Cypress para validar flujos críticos de autenticación y CRUD. Cypress MUST
+ser la herramienta E2E aprobada para frontend salvo enmienda formal de esta constitución. La
+aplicación web MUST exponer dos caminos de autenticación independientes: uno para el CRUD de
+Empleados y otro para el CRUD de Departamentos. El orden de entrega MUST ser secuencial: primero
+se entrega el login de Empleados y después se implementa el login de Departamentos.
 
 Rationale: una base frontend única con pruebas E2E uniformes reduce ambigüedad funcional y
 permite validar navegación/autorización real para ambos módulos de negocio.
@@ -87,6 +92,7 @@ permite validar navegación/autorización real para ambos módulos de negocio.
 - El dominio organizacional MUST soportar CRUD de departamentos con `clave` y `nombre`, y la
   relación obligatoria de cada `Empleado` con un `Departamento` válido.
 - El frontend MUST usar Angular 22 LTS y las pruebas E2E MUST implementarse con Cypress.
+- Cypress MUST NOT ser sustituido en pruebas E2E frontend sin enmienda constitucional aprobada.
 - El sistema MUST incluir dos rutas de login separadas para Empleados y Departamentos con
   implementación secuencial (Empleados primero, Departamentos después).
 
@@ -111,4 +117,4 @@ Esta constitución prevalece sobre prácticas ad-hoc del repositorio.
 - Toda revisión de `plan.md` y PR MUST incluir una verificación explícita de cumplimiento.
 - Si existe conflicto entre documentos, este archivo y su versión vigente tienen prioridad.
 
-**Version**: 3.2.0 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-03-19
+**Version**: 3.2.1 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-03-25

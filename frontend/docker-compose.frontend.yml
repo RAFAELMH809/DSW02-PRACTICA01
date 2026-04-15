@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: empleados-frontend-nginx
+    restart: unless-stopped
+    ports:
+      - "4200:80"

@@ -11,10 +11,10 @@
 
   <section class="messages" aria-live="polite">
     @if (mensaje()) {
-      <p class="ok">{{ mensaje() }}</p>
+      <p class="ok" data-testid="dept-ok-msg">{{ mensaje() }}</p>
     }
     @if (error()) {
-      <p class="err">{{ error() }}</p>
+      <p class="err" data-testid="dept-error-msg">{{ error() }}</p>
     }
   </section>
 
@@ -22,8 +22,8 @@
     <article class="card">
       <h2 class="card-title">Nuevo departamento</h2>
       <div class="input-group">
-        <input type="text" maxlength="20" placeholder="Clave (ej. RH)" [(ngModel)]="nuevoDepartamento.clave" />
-        <input type="text" maxlength="100" placeholder="Nombre del departamento" [(ngModel)]="nuevoDepartamento.nombre" />
+        <input type="text" maxlength="20" placeholder="Clave (ej. RH)" [(ngModel)]="nuevoDepartamento.clave" data-testid="dept-new-clave" />
+        <input type="text" maxlength="100" placeholder="Nombre del departamento" [(ngModel)]="nuevoDepartamento.nombre" data-testid="dept-new-nombre" />
       </div>
 
       <div class="actions">
@@ -31,21 +31,44 @@
           type="button"
           (click)="crearDepartamento()"
           [disabled]="cargando() || !nuevoDepartamento.clave || !nuevoDepartamento.nombre"
+          data-testid="crear-departamento-btn"
         >
           Crear
         </button>
-        <button type="button" class="secondary" (click)="cargarDepartamentos()" [disabled]="cargando()">Refrescar</button>
+        <button type="button" class="secondary" (click)="cargarDepartamentos()" [disabled]="cargando()" data-testid="refrescar-departamentos-btn">Refrescar</button>
       </div>
     </article>
 
     <article class="card">
       <h2 class="card-title">Departamentos ({{ total() }})</h2>
-      <div class="dept-grid">
+      <div class="dept-grid" data-testid="dept-list">
         @for (d of departamentos(); track d.clave) {
-          <div class="dept-item">
-            <h4>{{ d.clave }}</h4>
-            <p>{{ d.nombre }}</p>
-            <p>Empleados: {{ d.employeeCount }}</p>
+          <div class="dept-item" [attr.data-testid]="'dept-item-' + d.clave">
+            @if (editandoDepartamentoClave() === d.clave) {
+              <h4>{{ d.clave }}</h4>
+              <div class="input-group compact">
+                <input type="text" [(ngModel)]="departamentoEdicion.nombre" placeholder="Nombre" data-testid="dept-edit-nombre" />
+              </div>
+              <div class="actions">
+                <button
+                  type="button"
+                  (click)="guardarEdicionDepartamento(d.clave)"
+                  [disabled]="cargando() || !departamentoEdicion.nombre"
+                  [attr.data-testid]="'guardar-departamento-' + d.clave"
+                >
+                  Guardar
+                </button>
+                <button type="button" class="secondary" (click)="cancelarEdicionDepartamento()" data-testid="cancelar-edicion-departamento">Cancelar</button>
+              </div>
+            } @else {
+              <h4>{{ d.clave }}</h4>
+              <p>{{ d.nombre }}</p>
+              <p>Empleados: {{ d.employeeCount }}</p>
+              <div class="actions mt-sm">
+                <button type="button" class="secondary" (click)="iniciarEdicionDepartamento(d)" [attr.data-testid]="'editar-departamento-' + d.clave">Editar</button>
+                <button type="button" class="warn" (click)="eliminarDepartamento(d.clave)" [attr.data-testid]="'eliminar-departamento-' + d.clave">Eliminar</button>
+              </div>
+            }
           </div>
         }
         @empty {

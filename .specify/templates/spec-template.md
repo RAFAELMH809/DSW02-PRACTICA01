@@ -97,6 +97,7 @@
 - **ENV-001**: Local/integration execution MUST be reproducible via Docker/Compose.
 - **DOC-001**: New/changed endpoints MUST include OpenAPI/Swagger documentation requirements.
 - **QUAL-001**: The feature MUST define unit and integration test expectations.
+- **FE-TEST-001**: If the feature includes frontend web flows, E2E tests MUST be defined with Cypress for critical authentication and CRUD journeys.
 
 *Example of marking unclear requirements:*
 

@@ -37,6 +37,8 @@
 - Environment gate: ¿Existe estrategia Docker/Compose para entorno local/integración reproducible?
 - API contract gate: ¿Se contempla documentación OpenAPI 3/Swagger para endpoints nuevos o modificados?
 - Quality gate: ¿Hay pruebas unitarias/integración y criterios de bloqueo de merge por fallas?
+- Frontend gate: Si la iniciativa incluye frontend web, ¿se mantiene Angular 22 LTS?
+- E2E gate: Si la iniciativa incluye frontend web, ¿las pruebas E2E están definidas con Cypress para autenticación y CRUD?
 
 ## Project Structure
 

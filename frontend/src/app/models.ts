@@ -37,3 +37,7 @@ export interface DepartamentoRequest {
   clave: string;
   nombre: string;
 }
+
+export interface DepartamentoUpdateRequest {
+  nombre: string;
+}

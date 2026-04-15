@@ -21,10 +21,12 @@ departamento tecnico `SIN_DEPTO` y vincular empleados historicos sin departament
 **Storage**: PostgreSQL  
 **Testing**: JUnit 5, Spring Boot Test, MockMvc, Spring Security Test, Testcontainers (PostgreSQL)  
 **Target Platform**: Linux server / contenedor Docker
-**Project Type**: web-service backend REST  
+**Project Type**: web-service backend REST con evidencia frontend obligatoria (Principle VI)  
 **Performance Goals**: p95 < 2 s para consultas y listados paginados de departamentos  
 **Constraints**: `clave` de departamento inmutable y case-insensitive, relacion 1:N departamento-empleados con FK obligatoria, migracion tecnica con `SIN_DEPTO`, Bearer token igual que empleados, auditoria por logs, politica last-write-wins sin optimistic locking, sin target adicional para escrituras  
 **Scale/Scope**: 1 nueva entidad principal, 5 operaciones CRUD de departamentos, cambios en create/update/list/read de empleados para incluir referencia de departamento
+
+**Scope Note**: Aunque la implementacion principal es backend, este feature MUST incluir trazabilidad de frontend para cumplimiento constitucional (rutas de login separadas y evidencia E2E Cypress).
 
 ## Constitution Check
 

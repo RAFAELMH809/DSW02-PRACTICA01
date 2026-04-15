@@ -11,10 +11,10 @@
 
   <section class="messages" aria-live="polite">
     @if (mensaje()) {
-      <p class="ok">{{ mensaje() }}</p>
+      <p class="ok" data-testid="emp-ok-msg">{{ mensaje() }}</p>
     }
     @if (error()) {
-      <p class="err">{{ error() }}</p>
+      <p class="err" data-testid="emp-error-msg">{{ error() }}</p>
     }
   </section>
 
@@ -22,11 +22,11 @@
     <article class="card">
       <h2 class="card-title">Nuevo empleado</h2>
       <div class="input-group">
-        <input type="text" maxlength="100" placeholder="Nombre" [(ngModel)]="nuevoEmpleado.nombre" />
-        <input type="text" maxlength="100" placeholder="Direccion" [(ngModel)]="nuevoEmpleado.direccion" />
-        <input type="text" maxlength="100" placeholder="Telefono" [(ngModel)]="nuevoEmpleado.telefono" />
+        <input type="text" maxlength="100" placeholder="Nombre" [(ngModel)]="nuevoEmpleado.nombre" data-testid="emp-new-nombre" />
+        <input type="text" maxlength="100" placeholder="Direccion" [(ngModel)]="nuevoEmpleado.direccion" data-testid="emp-new-direccion" />
+        <input type="text" maxlength="100" placeholder="Telefono" [(ngModel)]="nuevoEmpleado.telefono" data-testid="emp-new-telefono" />
         <div class="select-wrap">
-          <select [(ngModel)]="nuevoEmpleado.departamentoClave" [ngModelOptions]="{ standalone: true }" aria-label="Departamento del empleado">
+          <select [(ngModel)]="nuevoEmpleado.departamentoClave" [ngModelOptions]="{ standalone: true }" aria-label="Departamento del empleado" data-testid="emp-new-departamento">
             @for (clave of departamentosDisponibles(); track clave) {
               <option [value]="clave">{{ clave }}</option>
             }
@@ -39,25 +39,26 @@
           type="button"
           (click)="crearEmpleado()"
           [disabled]="cargando() || !nuevoEmpleado.nombre || !nuevoEmpleado.direccion || !nuevoEmpleado.telefono || !nuevoEmpleado.departamentoClave"
+          data-testid="crear-empleado-btn"
         >
           Crear empleado
         </button>
-        <button type="button" class="secondary" (click)="cargarEmpleados()" [disabled]="cargando()">Refrescar</button>
+        <button type="button" class="secondary" (click)="cargarEmpleados()" [disabled]="cargando()" data-testid="refrescar-empleados-btn">Refrescar</button>
       </div>
     </article>
 
     <article class="card">
       <h2 class="card-title">Empleados ({{ empleadosTotal() }})</h2>
-      <div class="dept-grid">
+      <div class="dept-grid" data-testid="emp-list">
         @for (e of empleados(); track e.clave) {
-          <div class="dept-item">
+          <div class="dept-item" [attr.data-testid]="'emp-item-' + e.clave">
             @if (editandoEmpleadoClave() === e.clave) {
               <div class="input-group compact">
-                <input type="text" [(ngModel)]="empleadoEdicion.nombre" placeholder="Nombre" />
-                <input type="text" [(ngModel)]="empleadoEdicion.direccion" placeholder="Direccion" />
-                <input type="text" [(ngModel)]="empleadoEdicion.telefono" placeholder="Telefono" />
+                <input type="text" [(ngModel)]="empleadoEdicion.nombre" placeholder="Nombre" data-testid="emp-edit-nombre" />
+                <input type="text" [(ngModel)]="empleadoEdicion.direccion" placeholder="Direccion" data-testid="emp-edit-direccion" />
+                <input type="text" [(ngModel)]="empleadoEdicion.telefono" placeholder="Telefono" data-testid="emp-edit-telefono" />
                 <div class="select-wrap">
-                  <select [(ngModel)]="empleadoEdicion.departamentoClave" [ngModelOptions]="{ standalone: true }" aria-label="Departamento del empleado en edicion">
+                  <select [(ngModel)]="empleadoEdicion.departamentoClave" [ngModelOptions]="{ standalone: true }" aria-label="Departamento del empleado en edicion" data-testid="emp-edit-departamento">
                     @for (clave of departamentosDisponibles(); track clave) {
                       <option [value]="clave">{{ clave }}</option>
                     }
@@ -69,10 +70,11 @@
                   type="button"
                   (click)="guardarEdicionEmpleado(e.clave)"
                   [disabled]="cargando() || !empleadoEdicion.nombre || !empleadoEdicion.direccion || !empleadoEdicion.telefono || !empleadoEdicion.departamentoClave"
+                  [attr.data-testid]="'guardar-empleado-' + e.clave"
                 >
                   Guardar
                 </button>
-                <button type="button" class="secondary" (click)="cancelarEdicionEmpleado()">Cancelar</button>
+                <button type="button" class="secondary" (click)="cancelarEdicionEmpleado()" data-testid="cancelar-edicion-empleado">Cancelar</button>
               </div>
             } @else {
               <h4>{{ e.clave }}</h4>
@@ -81,8 +83,8 @@
               <p>{{ e.telefono }}</p>
               <p>Depto: {{ e.departamentoClave }}</p>
               <div class="actions mt-sm">
-                <button type="button" class="secondary" (click)="iniciarEdicionEmpleado(e)">Editar</button>
-                <button type="button" class="warn" (click)="eliminarEmpleado(e.clave)">Eliminar</button>
+                <button type="button" class="secondary" (click)="iniciarEdicionEmpleado(e)" [attr.data-testid]="'editar-empleado-' + e.clave">Editar</button>
+                <button type="button" class="warn" (click)="eliminarEmpleado(e.clave)" [attr.data-testid]="'eliminar-empleado-' + e.clave">Eliminar</button>
               </div>
             }
           </div>

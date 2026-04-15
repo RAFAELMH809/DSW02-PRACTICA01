@@ -71,6 +71,7 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T010 [P] Configure PostgreSQL container with Docker/Compose for local and integration runs
 - [ ] T011 [P] Configure JWT Bearer security baseline (token issuance/validation) and secret sourcing by environment
 - [ ] T012 [P] Enable OpenAPI/Swagger generation and UI exposure policy per environment
+- [ ] T013 [P] Configure Cypress E2E suite for frontend web authentication and CRUD critical flows
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -88,6 +89,7 @@ Examples of foundational tasks (adjust based on your project):
 
 - [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T012 [P] [US1] Frontend E2E test for [user journey] in frontend/cypress/e2e/[name].cy.ts (when web app scope applies)
 
 > Include security and persistence coverage when applicable (authenticated flow + PostgreSQL behavior).
 
@@ -114,6 +116,7 @@ Examples of foundational tasks (adjust based on your project):
 
 - [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T020 [P] [US2] Frontend E2E test for [user journey] in frontend/cypress/e2e/[name].cy.ts (when web app scope applies)
 
 ### Implementation for User Story 2
 
