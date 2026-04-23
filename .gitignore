@@ -29,3 +29,7 @@ Thumbs.db
 # Local tooling / machine-specific
 .tools/
 .testcontainers.properties
+
+# Cypress wizard files accidentally generated at repo root
+/cypress.config.js
+/cypress/
