@@ -1,0 +1,71 @@
+name: Analisis de SonarCloud
+
+on:
+  workflow_run:
+    workflows:
+      - "CI 01"
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request') }}
+
+    steps:
+      - name: Descargar el codigo (Checkout)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias frontend
+        working-directory: frontend
+        run: npm ci
+
+      - name: Ejecutar tests frontend con cobertura
+        working-directory: frontend
+        env:
+          CI: true
+        run: npx ng test --watch=false --code-coverage
+
+      - name: Compilar backend para generar binarios Java
+        run: mvn -B --no-transfer-progress -DskipTests compile
+
+      - name: Ejecutar SonarCloud Scanner
+        uses: SonarSource/sonarcloud-github-action@v2.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectBaseDir=.
+            -Dsonar.sources=src/main/java,frontend/src
+            -Dsonar.tests=src/test/java,frontend/src
+            -Dsonar.java.binaries=target/classes
+            -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info,frontend/coverage/frontend/lcov.info
+
+      - name: Validar compuerta de calidad (Quality Gate)
+        uses: SonarSource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
