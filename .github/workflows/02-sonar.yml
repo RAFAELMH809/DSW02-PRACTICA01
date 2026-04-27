@@ -46,7 +46,7 @@ jobs:
         working-directory: frontend
         env:
           CI: true
-        run: npx ng test --watch=false --code-coverage
+        run: npx ng test --watch=false --coverage --coverage-reporters=lcovonly
 
       - name: Compilar backend para generar binarios Java
         run: mvn -B --no-transfer-progress -DskipTests compile
