@@ -6,7 +6,11 @@ on:
       - "01-CI"
     types:
       - completed
+    branches:
+      - develop
   pull_request:
+    branches:
+      - develop
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
