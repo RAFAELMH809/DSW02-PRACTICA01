@@ -68,8 +68,8 @@ jobs:
         with:
           args: >
             -Dsonar.projectBaseDir=.
-            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY || format('{0}_{1}', github.repository_owner, github.event.repository.name) }}
-            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION || github.repository_owner }}
+             -Dsonar.projectKey=${{ vars.SONARPROJECTKEY || format('{0}_{1}', github.repository_owner, github.event.repository.name) }}
+             -Dsonar.organization=${{ vars.SONARORGANIZACION || github.repository_owner }}
             -Dsonar.sources=src/main/java,frontend/src
             -Dsonar.tests=src/test/java,frontend/src
             -Dsonar.java.binaries=target/classes
