@@ -3,7 +3,6 @@ name: 01-CI
 on:
   push:
     branches:
-      - main
       - develop
   pull_request:
     branches:
