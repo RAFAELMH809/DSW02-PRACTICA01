@@ -3,7 +3,7 @@ name: 04 Docker Hub
 on:
   pull_request:
     branches:
-      - master
+      - main
     types:
       - closed
 
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       ${{ github.event.pull_request.merged == true &&
-      github.event.pull_request.base.ref == 'master' &&
+      github.event.pull_request.base.ref == 'main' &&
       github.event.pull_request.head.ref == 'develop' }}
     permissions:
       contents: read
