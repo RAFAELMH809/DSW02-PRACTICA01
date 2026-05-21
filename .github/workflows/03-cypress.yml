@@ -1,18 +1,24 @@
 name: 03 Cypress
 
 on:
-  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - chain-cypress
+
+permissions:
+  contents: write
 
 jobs:
   cypress-e2e:
     runs-on: ubuntu-latest
+    if: ${{ github.event.client_payload.branch == 'develop' }}
     defaults:
       run:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.client_payload.sha }}
 
       - uses: actions/setup-node@v4
         with:
@@ -38,3 +44,18 @@ jobs:
           name: cypress-screenshots
           path: frontend/cypress/screenshots
           if-no-files-found: ignore
+
+      - name: Disparar 04 Docker Hub
+        if: ${{ success() }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'chain-docker',
+              client_payload: {
+                sha: context.payload.client_payload.sha,
+                branch: context.payload.client_payload.branch
+              }
+            });
